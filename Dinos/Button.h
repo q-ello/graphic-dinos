@@ -7,24 +7,28 @@ class Button
 {
 public:
 	Button(int textSize, const std::string& text, sf::Color color, sf::Vector2f position, 
-		E_Choice meaning, bool focused = false);
+		int meaning, bool focused = false);
+
+	Button();
 	~Button() {};
 
-	void draw(sf::RenderWindow* window);
+	virtual void draw(sf::RenderWindow* window);
 	bool handleMouseMovement(int mouseX, int mouseY);
-	void toggleFocus(bool focus);
+	virtual void toggleFocus(bool focus);
 	bool handleMousePressed(int mouseX, int mouseY);
-	void toggleAlmostExecuted(bool focus);
+	virtual void toggleAlmostExecuted(bool focus);
 	bool handleMouseReleased(int mouseX, int mouseY);
+	virtual bool checkCondition();
 
-	E_Choice meaning()
+	int meaning()
 	{
 		return _meaning;
 	}
-private:
+protected:
 	sf::Text _text;
 	sf::Color _textColor;
 	bool _focused;
 	bool _almostExecuted{ false };
-	E_Choice _meaning;
+	int _meaning;
+	virtual sf::FloatRect getBounds();
 };

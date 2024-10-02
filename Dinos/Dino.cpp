@@ -27,9 +27,23 @@ Dino::Dino(Terrain typ, EDinoName dinoName, int str, int dex, int intel)
     }
 
     _sprite.setTexture(_texture);
-    const int textSize = 25;
+    const int textSize = 20;
 
-    _nameText = Utils::setText(30, C_DARK_GREEN, name());
+    sf::Color typeColor;
+    switch (_type)
+    {
+    case T_Mountain:
+        typeColor = C_INT;
+        break;
+    case T_Plain:
+        typeColor = C_STR;
+        break;
+    default:
+        typeColor = C_DEX;
+        break;
+    }
+    _nameText = Utils::setText(30, typeColor, name());
+
     _info.push_back(Utils::setText(textSize, C_DARK_GREEN, "STR: " + std::to_string(strength())));
     _info.push_back(Utils::setText(textSize, C_DARK_GREEN, "DEX: " + std::to_string(dexterity())));
     _info.push_back(Utils::setText(textSize, C_DARK_GREEN, "INT: " + std::to_string(intellect())));
@@ -79,13 +93,13 @@ std::string Dino::type() const
     switch (_type)
     {
     case T_Plain:
-        return "DinoStr";
+        return "STR";
         break;
     case T_River:
-        return "DinoDex";
+        return "DEX";
         break;
     default:
-        return "DinoInt";
+        return "INT";
         break;
     }
 }
@@ -168,21 +182,66 @@ void Dino::setDataForDrawing(sf::Vector2f position)
     const int xOffset = 150;
     const int yOffset = 30;
     const int infoSize = static_cast<int>(_info.size());
+    const sf::Vector2f nameSize = _nameText.getLocalBounds().getSize();
+    const sf::Vector2f namePosition = sf::Vector2f(position.x + (DINOCARD_SIZE.x - nameSize.x) / 2, position.y - 40);
+
+    _nameText.setPosition(namePosition);
 
     for (int i = 0; i < infoSize; i++)
     {
         _info[i].setPosition(sf::Vector2f(position.x + xOffset, position.y + yOffset * i));
     }
+    _clock.restart();
+    _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
+        SPRITE_OFFSET * _state), DINO_VEC));
 }
 
 void Dino::drawForShop(sf::RenderWindow* window)
 {
-    _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
-        SPRITE_OFFSET * _state), DINO_VEC));
+    if (_clock.getElapsedTime().asSeconds() >= .2)
+    {
+        _activeFrame = (_activeFrame + 1) % 2;
+        _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
+            SPRITE_OFFSET * _state), DINO_VEC));
+        _clock.restart();
+    }
     window->draw(_sprite);
+    window->draw(_nameText);
     for (auto& infopart : _info)
     {
         window->draw(infopart);
     }
-    _activeFrame = (_activeFrame + 1) % 2;
+}
+
+void Dino::drawInParty(sf::RenderWindow* window)
+{
+    if (_clock.getElapsedTime().asSeconds() >= .2)
+    {
+        _activeFrame = (_activeFrame + 1) % 2;
+        _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
+            SPRITE_OFFSET * _state), DINO_VEC));
+        _clock.restart();
+    }
+    window->draw(_sprite);
+    window->draw(_nameText);
+    for (int i = 0; i < 5; i++)
+    {
+        window->draw(_info[i]);
+    }
+}
+
+void Dino::drawInMain(sf::RenderWindow* window, sf::Vector2f position)
+{
+    if (_clock.getElapsedTime().asSeconds() >= .2)
+    {
+        _activeFrame = (_activeFrame + 1) % 2;
+        _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
+            SPRITE_OFFSET * _state), DINO_VEC));
+        _clock.restart();
+    }
+    _sprite.setScale(sf::Vector2f(1, 1));
+    _sprite.setPosition(position);
+    _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
+        SPRITE_OFFSET * _state), DINO_VEC));
+    window->draw(_sprite);
 }

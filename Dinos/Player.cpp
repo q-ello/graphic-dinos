@@ -8,7 +8,7 @@ void Player::clearData()
 
 void Player::save()
 {
-    std::ofstream savefile("savefile.txt");
+    std::ofstream savefile("data/savefile.txt");
     if (savefile.is_open())
     {
         savefile << "MONEY: " << _money << "\n";
@@ -25,9 +25,22 @@ void Player::save()
     }
 }
 
+void Player::addDino(Dino* newDino)
+{
+    auto emptySlot = std::find(_currentParty.begin(), _currentParty.end(), nullptr);
+    if (emptySlot != _currentParty.end())
+    {
+        *emptySlot = newDino;
+    }
+    else
+    {
+        _ownedDinosaurs.push_back(std::move(newDino));
+    }
+}
+
 void Player::load()
 {
-    std::ifstream savefile("savefile.txt");
+    std::ifstream savefile("data/savefile.txt");
 
     if (savefile.is_open()) {
         std::string line;
@@ -55,16 +68,48 @@ void Player::load()
                 else {
                     dinosToLoad = &_ownedDinosaurs;
                 }
-                if (v[1] == "DinoStr")
-                    dinosToLoad->emplace_back(new Dino(T_Plain, convertToEnum(v[2]), stoi(v[3]), stoi(v[4]), stoi(v[5])));
-                if (v[1] == "DinoInt")
-                    dinosToLoad->emplace_back(new Dino(T_River, convertToEnum(v[2]), stoi(v[3]), stoi(v[4]), stoi(v[5])));
-                if (v[1] == "DinoDex")
-                    dinosToLoad->emplace_back(new Dino(T_Mountain, convertToEnum(v[2]), stoi(v[3]), stoi(v[4]), stoi(v[5])));
+                Terrain dinoType;
+                if (v[1] == "STR")
+                    dinoType = T_Plain;
+                else if (v[1] == "INT")
+                    dinoType = T_River;
+                else if (v[1] == "DEX")
+                    dinoType = T_Mountain;
+
+                dinosToLoad->emplace_back(new Dino(dinoType, convertToEnum(v[2]), stoi(v[3]), stoi(v[4]), stoi(v[5])));
             }
         }
         savefile.close();
     }
+    _currentParty.resize(3);
+}
+
+void Player::changeDino(int partyIndex, int restingIndex)
+{
+    Dino* partyDino = _currentParty[partyIndex];
+    _currentParty[partyIndex] = std::move(_ownedDinosaurs[restingIndex]);
+
+    if (partyDino == nullptr)
+    {
+        _ownedDinosaurs.erase(_ownedDinosaurs.begin() + restingIndex);
+    }
+    else
+    {
+        _ownedDinosaurs[restingIndex] = std::move(partyDino);
+    }
+}
+
+boolean Player::partyIsEmpty()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (_currentParty[i] != nullptr)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 int Player::_money{ 100 };

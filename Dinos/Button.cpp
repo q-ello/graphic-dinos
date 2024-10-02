@@ -1,7 +1,7 @@
 #include "Button.h"
 
 Button::Button(int textSize, const std::string& text, sf::Color color, sf::Vector2f position, 
-	E_Choice meaning, bool focused)
+	int meaning, bool focused)
 	: _textColor{ color }
 	, _focused{ focused }
 	, _meaning {meaning}
@@ -9,8 +9,18 @@ Button::Button(int textSize, const std::string& text, sf::Color color, sf::Vecto
 	_text = Utils::setText(textSize, focused ? C_FOCUSED : color, text, position);
 }
 
+Button::Button()
+	: _focused {false}
+	, _meaning {C_NOTHING}
+{
+}
+
 void Button::draw(sf::RenderWindow* window)
 {
+	if (!checkCondition())
+	{
+		return;
+	}
 	window->draw(_text);
 }
 
@@ -26,7 +36,12 @@ void Button::toggleFocus(bool focus)
 
 bool Button::handleMouseMovement(int mouseX, int mouseY)
 {
-	if (_focused != _text.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mouseX), 
+	if (!checkCondition())
+	{
+		return false;
+	}
+
+	if (_focused != getBounds().contains(sf::Vector2f(static_cast<float>(mouseX),
 		static_cast<float>(mouseY))))
 	{
 		if (!_focused)
@@ -45,7 +60,11 @@ bool Button::handleMouseMovement(int mouseX, int mouseY)
 
 bool Button::handleMousePressed(int mouseX, int mouseY)
 {
-	if (_almostExecuted != _text.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mouseX), 
+	if (!checkCondition())
+	{
+		return false;
+	}
+	if (_almostExecuted != getBounds().contains(sf::Vector2f(static_cast<float>(mouseX),
 		static_cast<float>(mouseY))))
 	{
 		if (!_almostExecuted)
@@ -65,10 +84,20 @@ void Button::toggleAlmostExecuted(bool focus)
 
 bool Button::handleMouseReleased(int mouseX, int mouseY)
 {
-	if (_almostExecuted && _text.getGlobalBounds().contains(sf::Vector2f(static_cast<float>(mouseX), 
+	if (_almostExecuted && getBounds().contains(sf::Vector2f(static_cast<float>(mouseX),
 		static_cast<float>(mouseY))))
 	{
 		return true;
 	}
 	return false;
+}
+
+bool Button::checkCondition()
+{
+	return true;
+}
+
+sf::FloatRect Button::getBounds()
+{
+	return _text.getGlobalBounds();
 }

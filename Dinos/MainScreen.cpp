@@ -17,6 +17,8 @@ void MainScreen::setScreenData()
 	const int xOffset = 350;
 	const int yOffset = 100;
 
+	
+
 	_buttons[0].push_back(new Button(textSize, "FIGHT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal), C_FIGHT, true));
 	_buttons[0].push_back(new Button(textSize, "PARTY", C_DARK_GREEN,
@@ -27,6 +29,8 @@ void MainScreen::setScreenData()
 		sf::Vector2f(xOriginal + xOffset, yOriginal + yOffset), C_RESTING));
 	_buttons[2].push_back(new Button(textSize, "SAVE", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + 2 * yOffset), C_SAVE));
+	_buttons[2].push_back(new LuckyDinoButton(textSize, "LUCKY DINO", C_DARK_GREEN,
+		sf::Vector2f(xOriginal + xOffset, yOriginal + 2 * yOffset), C_LUCKY_DINO));
 	_buttons[3].push_back(new Button(textSize, "QUIT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + 3 * yOffset), C_QUIT));
 }
@@ -42,6 +46,26 @@ void MainScreen::drawData()
 	}
 	
 	_window->draw(_moneyText);
+
+	const sf::Vector2f partyPosition = sf::Vector2f(550, 250);
+	const int xDinoOffset = 50;
+	const int yOffset = 100;
+	std::vector<Dino*> party = Player::party();
+	for (int i = 0; i < party.size(); i++)
+	{
+		if (party[i] == nullptr)
+		{
+			continue;
+		}
+		party[i]->drawInMain(_window, sf::Vector2f(partyPosition.x + xDinoOffset * i, partyPosition.y));
+
+	}
+	std::vector<Dino*> resting = Player::owned();
+	for (int i = 0; i < resting.size(); i++)
+	{
+		resting[i]->drawInMain(_window, sf::Vector2f(partyPosition.x + xDinoOffset * i, partyPosition.y + yOffset));
+
+	}
 }
 
 void MainScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
@@ -52,28 +76,10 @@ void MainScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 		return;
 	}
 
-	const int arrHeight = 4;
-	const int arrWidth = 2;
-
-	std::pair<int, int> newActiveIndex = _activeIndex;
-	if (code == sf::Keyboard::Scan::Left || code == sf::Keyboard::Scan::A)
+	if (Utils::keyIsArrow(code))
 	{
-		newActiveIndex.second = (_activeIndex.second - 1 + arrWidth) % arrWidth;
+		changeFocusedButton(Utils::handleArrows(code));
 	}
-	else if (code == sf::Keyboard::Scan::Up || code == sf::Keyboard::Scan::W)
-	{
-		newActiveIndex.first = (_activeIndex.first - 1 + arrHeight) % arrHeight;
-	}
-	else if (code == sf::Keyboard::Scan::Right || code == sf::Keyboard::Scan::D)
-	{
-		newActiveIndex.second = (_activeIndex.second + 1) % arrWidth;
-	}
-	else if (code == sf::Keyboard::Scan::Down || code == sf::Keyboard::Scan::S)
-	{
-		newActiveIndex.first = (_activeIndex.first + 1) % arrHeight;
-	}
-	newActiveIndex.second %= _buttons[newActiveIndex.first].size();
-	changeFocusedButton(newActiveIndex);
 }
 
 void MainScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
@@ -125,24 +131,46 @@ void MainScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
 		{
 			if (_buttons[i][j]->handleMouseMovement(moveEvent.x, moveEvent.y))
 			{
-				changeFocusedButton({ i, j });
+				changeFocusedButton({ i, j }, false);
 				return;
 			}
 		}
 	}
 }
 
-void MainScreen::changeFocusedButton(std::pair<int, int> index)
+void MainScreen::setNewActiveIndex(std::pair<int, int> direction)
+{
+	const int arrWidth = static_cast<int>(_buttons[_activeIndex.first].size());
+	const int arrHeight = static_cast<int>(_buttons.size());
+	std::pair<int, int> newActiveIndex = _activeIndex;
+	_activeIndex.second = (_activeIndex.second + direction.first + arrWidth) % arrWidth;
+	_activeIndex.first = (_activeIndex.first + direction.second + arrHeight) % arrHeight;
+	
+	_activeIndex.second %= _buttons[_activeIndex.first].size();
+	if (!_buttons[_activeIndex.first][_activeIndex.second]->checkCondition())
+	{
+		setNewActiveIndex({-1, 0});
+	}
+}
+
+void MainScreen::changeFocusedButton(std::pair<int, int> direction, bool withArrows)
 {
 	_buttons[_activeIndex.first][_activeIndex.second]->toggleFocus(false);
-	_activeIndex = index;
+	if (withArrows)
+	{
+		setNewActiveIndex(direction);
+	}
+	else
+	{
+		_activeIndex = direction;
+	}
 	_buttons[_activeIndex.first][_activeIndex.second]->toggleFocus(true);
 }
 
 void MainScreen::changeState()
 {
-	E_Choice choice = _buttons[_activeIndex.first][_activeIndex.second]->meaning();
-	switch (choice) 
+	int choice = _buttons[_activeIndex.first][_activeIndex.second]->meaning();
+	switch (choice)
 	{
 	case C_SHOP:
 	{
@@ -155,6 +183,32 @@ void MainScreen::changeState()
 		Player::save();
 		_popup = new Popup("Your progress was\nsuccessfully saved.");
 		return;
+	case C_LUCKY_DINO:
+	{
+		Dino* dino = Dino::generateDino();
+		_popup = new Popup("You got a lucky dino!");
+		Player::addDino(std::move(dino));
+		return;
+	}
+	case C_PARTY:
+	{
+		PartyScreen* partyScreen = new PartyScreen(_window);
+		partyScreen->show();
+		delete partyScreen;
+		return;
+	}
+	case C_RESTING:
+	{
+		if (Player::owned().empty())
+		{
+			_popup = new Popup("You have no resting dinos");
+			return;
+		}
+		RestingScreen* restingScreen = new RestingScreen(_window);
+		restingScreen->show();
+		delete restingScreen;
+		return;
+	}
 	case C_QUIT:
 		handleCloseWindowEvent();
 		break;

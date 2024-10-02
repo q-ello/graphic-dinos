@@ -5,7 +5,7 @@ Popup::Popup(const std::string& mainText, PopupType type, const std::vector<std:
 	: _meaning {type}
 {
 	_mainText = Utils::setText(40, C_DARK_GREEN, mainText);
-	_bg = Utils::setBG(C_POPUP_BG);
+	_bg = Utils::setBG(C_SEMITRANSPARENT);
 	_clueText = Utils::setClueText(C_DARK_GREEN);
 
 	sf::Vector2f size = _mainText.getLocalBounds().getSize();
@@ -15,8 +15,7 @@ Popup::Popup(const std::string& mainText, PopupType type, const std::vector<std:
 	
 	if (!buttons.empty())
 	{
-		bodySize.y += 50;
-		bodyPos.y -= 25;
+		bodySize.y += 25;
 
 		const sf::Vector2f buttonPos = sf::Vector2f(bodyPos.x + 10, bodyPos.y + bodySize.y - 30);
 		const int buttonOffset = 50;
@@ -31,6 +30,11 @@ Popup::Popup(const std::string& mainText, PopupType type, const std::vector<std:
 	_body = Utils::setRect(bodySize, C_DULL_GREEN, C_DARK_GREEN, 3, bodyPos);
 	_mainText.setPosition(sf::Vector2f(bodyPos.x + 10,
 		bodyPos.y + 5));
+}
+
+Popup::Popup()
+	: _meaning {P_INFORM}
+{
 }
 
 Popup::~Popup()
@@ -73,7 +77,7 @@ void Popup::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 	}
 }
 
-E_Choice Popup::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
+int Popup::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 {
 	if (_buttons.empty())
 	{
@@ -101,7 +105,7 @@ void Popup::handleMouseButtonPressedEvent(int mouseX, int mouseY)
 	}
 }
 
-E_Choice Popup::handleMouseButtonReleasedEvent(int mouseX, int mouseY)
+int Popup::handleMouseButtonReleasedEvent(int mouseX, int mouseY)
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{

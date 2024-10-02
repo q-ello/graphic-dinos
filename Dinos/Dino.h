@@ -77,6 +77,10 @@ public:
 
     void drawForShop(sf::RenderWindow* window);
 
+    void drawInParty(sf::RenderWindow* window);
+
+    void drawInMain(sf::RenderWindow* window, sf::Vector2f position);
+
 private:
     int _STR;
     int _DEX;
@@ -92,4 +96,5 @@ private:
     sf::Texture _texture;
     std::vector<sf::Text> _info{};
     sf::Text _nameText;
+    sf::Clock _clock;
 };

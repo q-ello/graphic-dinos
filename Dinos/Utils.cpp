@@ -49,4 +49,46 @@ sf::RectangleShape Utils::setRect(sf::Vector2f size, sf::Color color, sf::Color 
 	return rect;
 }
 
+UINT Utils::frame()
+{
+	if (_clock.getElapsedTime().asMilliseconds() > 300)
+	{
+		_clock.restart();
+		_frame++;
+	}
+	return _frame;
+}
+
+boolean Utils::keyIsArrow(sf::Keyboard::Scancode code)
+{
+	return code == sf::Keyboard::Scan::Left || code == sf::Keyboard::Scan::A
+		|| code == sf::Keyboard::Scan::Up || code == sf::Keyboard::Scan::W
+		|| code == sf::Keyboard::Scan::Right || code == sf::Keyboard::Scan::D
+		|| code == sf::Keyboard::Scan::Down || code == sf::Keyboard::Scan::S;
+}
+
+std::pair<int, int> Utils::handleArrows(sf::Keyboard::Scancode code)
+{
+	std::pair direction{ 0, 0 };
+	if (code == sf::Keyboard::Scan::Left || code == sf::Keyboard::Scan::A)
+	{
+		direction.first = -1;
+	}
+	else if (code == sf::Keyboard::Scan::Up || code == sf::Keyboard::Scan::W)
+	{
+		direction.second = -1;
+	}
+	else if (code == sf::Keyboard::Scan::Right || code == sf::Keyboard::Scan::D)
+	{
+		direction.first = 1;
+	}
+	else if (code == sf::Keyboard::Scan::Down || code == sf::Keyboard::Scan::S)
+	{
+		direction.second = 1;
+	}
+	return direction;
+}
+
 sf::Font Utils::_font;
+sf::Clock Utils::_clock;
+UINT Utils::_frame = 0;

@@ -20,13 +20,13 @@ public:
 
 protected:
 	sf::RenderWindow* _window;
-	int _money;
 	sf::Text _moneyText;
 	Popup* _popup;
 	sf::RectangleShape _bg;
+	boolean _show{ true };
 
 	virtual void setScreenData() = 0;
-	void setMoneyData();
+	virtual void setMoneyData();
 	virtual void drawData() = 0;
 	virtual void handleKeyPressedEvent(sf::Keyboard::Scancode code);
 	virtual void handleKeyReleasedEvent(sf::Keyboard::Scancode code);
@@ -35,7 +35,7 @@ protected:
 	virtual void handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent);
 	virtual void handleCloseWindowEvent();
 	virtual void createBG();
-	void drawBG();
-	void handlePopupChoice(E_Choice choice);
-	void virtual handleDiffPopupChoice(E_Choice choice);
+	virtual void drawBG();
+	virtual void handlePopupChoice(int choice);
+	virtual void handleDiffPopupChoice(int choice);
 };

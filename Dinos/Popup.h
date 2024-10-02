@@ -15,6 +15,7 @@ class Popup
 public:
 	Popup(const std::string& mainText, PopupType type = P_INFORM, const std::vector<std::string>& buttons = {}, 
 		std::vector<E_Choice> choices = {});
+	Popup();
 	~Popup();
 
 	PopupType type()
@@ -25,12 +26,12 @@ public:
 	void draw(sf::RenderWindow* window);
 
 	void handleKeyPressedEvent(sf::Keyboard::Scancode code);
-	E_Choice handleKeyReleasedEvent(sf::Keyboard::Scancode code);
+	virtual int handleKeyReleasedEvent(sf::Keyboard::Scancode code);
 	void handleMouseButtonPressedEvent(int mouseX, int mouseY);
-	E_Choice handleMouseButtonReleasedEvent(int mouseX, int mouseY);
+	virtual int handleMouseButtonReleasedEvent(int mouseX, int mouseY);
 	void handleMouseMovedEvent(int mouseX, int mouseY);
 	
-private:
+protected:
 	sf::Vector2f _size{ sf::Vector2f(200, 100) };
 	sf::Text _mainText;
 	std::vector<Button*> _buttons;

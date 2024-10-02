@@ -1,20 +1,17 @@
 #pragma once
-#include "ScreenBase.h"
-#include "Button.h"
-#include "ShopScreen.h"
-#include "LuckyDinoButton.h"
-#include "PartyScreen.h"
-#include "RestingScreen.h"
 
-class MainScreen : public ScreenBase
+#include "ScreenBase.h"
+#include "DinoCard.h"
+#include "DinoPopup.h"
+
+class PartyScreen : public ScreenBase
 {
 public:
 	using ScreenBase::ScreenBase;
-	~MainScreen();
-
-private:
-	std::vector<std::vector<Button*>> _buttons{ {}, {}, {}, {} };
-	std::pair<int, int> _activeIndex{ 0, 0 };
+	~PartyScreen();
+protected:
+	std::vector<DinoCard*> _dinos;
+	int _activeIndex{ 0 };
 
 	void setScreenData() override;
 	void drawData() override;
@@ -23,9 +20,10 @@ private:
 	void handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent button) override;
 	void handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button) override;
 	void handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent) override;
-	void setNewActiveIndex(std::pair<int, int> direction);
+	virtual void setNewActiveIndex(std::pair<int, int> direction);
+	void handleDiffPopupChoice(int choice) override;
 
 	void changeFocusedButton(std::pair<int, int> index, bool withArrows = true);
-	void changeState();
+	virtual void changeDino();
+	virtual void updateDinoCards();
 };
-

@@ -30,17 +30,20 @@ public:
         _money = _money + income >= 0 ? _money + income : 0;
     }
 
-    static void addDino(Dino* newDino)
-    {
-        _ownedDinosaurs.emplace_back(std::move(newDino));
-    }
+    static void addDino(Dino* newDino);
 
     static void load();
+
+    static void changeDino(int partyIndex, int restingIndex);
+
+    static boolean partyIsEmpty();
+
 
 private:
 	static int _money;
     static std::vector<Dino*> _ownedDinosaurs;
     static std::vector<Dino*> _currentParty;
+    static int _restingIndex;
 };
 
 /*

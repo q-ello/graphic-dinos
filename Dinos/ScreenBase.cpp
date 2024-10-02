@@ -4,8 +4,7 @@ ScreenBase::ScreenBase(sf::RenderWindow* window)
 	: _window {window}
 	, _popup {nullptr}
 {
-	_money = Player::money();
-	_moneyText = Utils::setText(40, C_BRIGHT_GREEN, "MONEY: " + std::to_string(_money), 
+	_moneyText = Utils::setText(40, C_BRIGHT_GREEN, "MONEY: " + std::to_string(Player::money()),
 		sf::Vector2f(750, 50));
 }
 
@@ -15,10 +14,10 @@ void ScreenBase::show()
 
 	createBG();
 	setScreenData();
-	setMoneyData();
 
 	while (true)
 	{
+		setMoneyData();
 		while (_window->pollEvent(event))
 		{
 			switch (event.type)
@@ -41,7 +40,7 @@ void ScreenBase::show()
 			case sf::Event::EventType::KeyReleased:
 				if (_popup != nullptr)
 				{
-					E_Choice choice = _popup->handleKeyReleasedEvent(event.key.scancode);
+					int choice = _popup->handleKeyReleasedEvent(event.key.scancode);
 					handlePopupChoice(choice);
 				}
 				else
@@ -62,7 +61,7 @@ void ScreenBase::show()
 			case sf::Event::EventType::MouseButtonReleased:
 				if (_popup != nullptr)
 				{
-					E_Choice choice = _popup->handleMouseButtonReleasedEvent(event.mouseButton.x, 
+					int choice = _popup->handleMouseButtonReleasedEvent(event.mouseButton.x, 
 						event.mouseButton.y);
 					handlePopupChoice(choice);
 				}
@@ -101,19 +100,18 @@ void ScreenBase::show()
 
 		if (!_window->isOpen())
 			return;
+
+		if (!_show)
+		{
+			return;
+		}
 	}
 	return;
 }
 
 void ScreenBase::setMoneyData()
 {
-	int playerMoney = Player::money();
-	if (_money != playerMoney)
-	{
-		int dir = (playerMoney > _money) - (playerMoney < _money);
-		_money += dir;
-		_moneyText.setString("MONEY: " + std::to_string(_money));
-	}
+	_moneyText.setString("MONEY: " + std::to_string(Player::money()));
 }
 
 void ScreenBase::handleKeyPressedEvent(sf::Keyboard::Scancode code)
@@ -158,7 +156,7 @@ void ScreenBase::drawBG()
 	_window->draw(_bg);
 }
 
-void ScreenBase::handlePopupChoice(E_Choice choice)
+void ScreenBase::handlePopupChoice(int choice)
 {
 	switch (choice)
 	{
@@ -189,6 +187,6 @@ void ScreenBase::handlePopupChoice(E_Choice choice)
 	handleDiffPopupChoice(choice);
 }
 
-void ScreenBase::handleDiffPopupChoice(E_Choice choice)
+void ScreenBase::handleDiffPopupChoice(int choice)
 {
 }
