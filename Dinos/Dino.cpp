@@ -173,11 +173,13 @@ Dino* Dino::generateDino()
     return new Dino(type, DinoName, rand() % 20 + 10, rand() % 20 + 10, rand() % 20 + 10);
 }
 
-void Dino::setDataForDrawing(sf::Vector2f position)
+void Dino::setDataForDrawing(sf::Vector2f position, boolean enemy)
 {
     _state = D_Idle;
-    _sprite.setPosition(position);
-    _sprite.setScale(sf::Vector2f(3, 3));
+    _sprite.setOrigin(sf::Vector2f(25, 25));
+    _sprite.setScale(sf::Vector2f(enemy ? -3 : 3, 3));
+    offset();
+    _sprite.setPosition(sf::Vector2f(position.x + _offset.x, position.y + _offset.y));
 
     const int xOffset = 150;
     const int yOffset = 30;
@@ -244,4 +246,10 @@ void Dino::drawInMain(sf::RenderWindow* window, sf::Vector2f position)
     _sprite.setTextureRect(sf::IntRect(sf::Vector2i(SPRITE_OFFSET * _activeFrame,
         SPRITE_OFFSET * _state), DINO_VEC));
     window->draw(_sprite);
+}
+
+void Dino::offset()
+{
+    const sf::Vector2f dinoSize{ _sprite.getGlobalBounds().getSize() };
+    _offset = sf::Vector2f( dinoSize.x / 2, dinoSize.y / 2 );
 }

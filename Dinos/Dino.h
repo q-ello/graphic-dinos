@@ -71,13 +71,15 @@ public:
 
     static Dino* generateDino();
 
-    void setDataForDrawing(sf::Vector2f position);
+    void setDataForDrawing(sf::Vector2f position, boolean enemy = false);
 
     void drawForShop(sf::RenderWindow* window);
 
     void drawInParty(sf::RenderWindow* window);
 
     void drawInMain(sf::RenderWindow* window, sf::Vector2f position);
+
+    void offset();
 
 private:
     int _STR;
@@ -89,6 +91,7 @@ private:
     Terrain _type;
     int _activeFrame{ 0 };
     DinoState _state{ D_Idle };
+    sf::Vector2f _offset{ 0, 0 };
 
     sf::Sprite _sprite;
     sf::Texture _texture;
