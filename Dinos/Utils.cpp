@@ -49,16 +49,6 @@ sf::RectangleShape Utils::setRect(sf::Vector2f size, sf::Color color, sf::Color 
 	return rect;
 }
 
-UINT Utils::frame()
-{
-	if (_clock.getElapsedTime().asMilliseconds() > 300)
-	{
-		_clock.restart();
-		_frame++;
-	}
-	return _frame;
-}
-
 boolean Utils::keyIsArrow(sf::Keyboard::Scancode code)
 {
 	return code == sf::Keyboard::Scan::Left || code == sf::Keyboard::Scan::A
@@ -90,5 +80,3 @@ std::pair<int, int> Utils::handleArrows(sf::Keyboard::Scancode code)
 }
 
 sf::Font Utils::_font;
-sf::Clock Utils::_clock;
-UINT Utils::_frame = 0;

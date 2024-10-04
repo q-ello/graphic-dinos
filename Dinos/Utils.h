@@ -23,14 +23,10 @@ public:
 		_font.loadFromFile("./font/lunchds.ttf");
 	}
 
-	static UINT frame();
-
 	static boolean keyIsArrow(sf::Keyboard::Scancode code);
 
 	static std::pair<int, int> handleArrows(sf::Keyboard::Scancode code);
 
 private:
 	static sf::Font _font;
-	static sf::Clock _clock;
-	static UINT _frame;
 };
