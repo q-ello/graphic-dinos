@@ -17,8 +17,6 @@ void MainScreen::setScreenData()
 	const int xOffset = 350;
 	const int yOffset = 100;
 
-	
-
 	_buttons[0].push_back(new Button(textSize, "FIGHT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal), C_FIGHT, true));
 	_buttons[0].push_back(new Button(textSize, "PARTY", C_DARK_GREEN,
@@ -182,35 +180,47 @@ void MainScreen::changeState()
 	case C_SAVE:
 		Player::save();
 		_popup = new Popup("Your progress was\nsuccessfully saved.");
-		return;
+		break;
 	case C_LUCKY_DINO:
 	{
 		Dino* dino = Dino::generateDino();
 		_popup = new Popup("You got a lucky dino!");
 		Player::addDino(std::move(dino));
-		return;
+		break;
 	}
 	case C_PARTY:
 	{
 		PartyScreen* partyScreen = new PartyScreen(_window);
 		partyScreen->show();
 		delete partyScreen;
-		return;
+		break;
 	}
 	case C_RESTING:
 	{
 		if (Player::owned().empty())
 		{
 			_popup = new Popup("You have no resting dinos");
-			return;
+			break;
 		}
 		RestingScreen* restingScreen = new RestingScreen(_window);
 		restingScreen->show();
 		delete restingScreen;
-		return;
+		break;
+	}
+	case C_FIGHT:
+	{
+		if (Player::partyIsEmpty())
+		{
+			_popup = new Popup("You have no dinos\nin your party");
+			break;
+		}
+		FightWelcomeScreen* fight = new FightWelcomeScreen(_window);
+		fight->show();
+		delete fight;
 	}
 	case C_QUIT:
 		handleCloseWindowEvent();
 		break;
 	}
+	_buttons[_activeIndex.first][_activeIndex.second]->toggleAlmostExecuted(false);
 }

@@ -6,14 +6,19 @@ ScreenBase::ScreenBase(sf::RenderWindow* window)
 {
 	_moneyText = Utils::setText(40, C_BRIGHT_GREEN, "MONEY: " + std::to_string(Player::money()),
 		sf::Vector2f(750, 50));
+	_returnBtn = new Button(25, "ESC - RETURN", C_DARK_GREEN, sf::Vector2f(25, 25), C_RETURN);
+}
+
+ScreenBase::ScreenBase()
+{
 }
 
 void ScreenBase::show()
 {
 	sf::Event event;
 
-	createBG();
 	setScreenData();
+	createBG();
 
 	while (true)
 	{
@@ -116,18 +121,37 @@ void ScreenBase::setMoneyData()
 
 void ScreenBase::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 {
+	if (code == sf::Keyboard::Scancode::Escape)
+	{
+		_returnBtn->toggleAlmostExecuted(true);
+		return;
+	}
 }
 
 void ScreenBase::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 {
+	if (code == sf::Keyboard::Scancode::Escape)
+	{
+		_show = false;
+		return;
+	}
 }
 
 void ScreenBase::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent button)
 {
+	if (_returnBtn->handleMousePressed(button.x, button.y))
+	{
+		return;
+	}
 }
 
 void ScreenBase::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
 {
+	if (_returnBtn->handleMouseReleased(button.x, button.y))
+	{
+		_show = false;
+		return;
+	}
 }
 
 void ScreenBase::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
@@ -164,6 +188,9 @@ void ScreenBase::handlePopupChoice(int choice)
 		return;
 	case C_RETURN:
 		_popup = nullptr;
+		return;
+	case C_QUIT:
+		_window->close();
 		return;
 	case C_YES:
 		if (_popup->type() == P_SAVE)

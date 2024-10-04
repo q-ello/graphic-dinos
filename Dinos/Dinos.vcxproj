@@ -135,6 +135,8 @@
     <ClCompile Include="Dino.cpp" />
     <ClCompile Include="DinoCard.cpp" />
     <ClCompile Include="DinoPopup.cpp" />
+    <ClCompile Include="FightMainScreen.cpp" />
+    <ClCompile Include="FightWelcomeScreen.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="LuckyDinoButton.cpp" />
     <ClCompile Include="main.cpp" />
@@ -155,6 +157,8 @@
     <ClInclude Include="DinoCard.h" />
     <ClInclude Include="DinoPopup.h" />
     <ClInclude Include="Fight.h" />
+    <ClInclude Include="FightMainScreen.h" />
+    <ClInclude Include="FightWelcomeScreen.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="LuckyDinoButton.h" />
     <ClInclude Include="MainScreen.h" />

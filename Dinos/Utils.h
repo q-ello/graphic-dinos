@@ -14,6 +14,7 @@ public:
 	static sf::Text setClueText(sf::Color color);
 
 	static sf::RectangleShape setBG(sf::Color color);
+	static sf::RectangleShape setBG(sf::Texture* texture);
 
 	static sf::RectangleShape setRect(sf::Vector2f size, sf::Color color, sf::Color outlineColor,
 		float thickness, sf::Vector2f position);

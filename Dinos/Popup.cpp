@@ -89,7 +89,7 @@ int Popup::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 	}
 	if (code == sf::Keyboard::Scancode::Escape)
 	{
-		return C_RETURN;
+		return _meaning == P_SAVE ? C_QUIT : C_RETURN;
 	}
 	return C_NOTHING;
 }

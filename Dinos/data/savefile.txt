@@ -1,2 +1,2 @@
-MONEY: 48
-CURRENT DEX Brontozaurus 17 11 20
+MONEY: 42
+CURRENT STR Brontozaurus 20 29 22

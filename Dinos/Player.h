@@ -38,7 +38,7 @@ public:
 
     static boolean partyIsEmpty();
 
-
+    static Terrain newTerrain();
 private:
 	static int _money;
     static std::vector<Dino*> _ownedDinosaurs;

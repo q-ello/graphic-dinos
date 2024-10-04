@@ -37,6 +37,15 @@ sf::RectangleShape Utils::setBG(sf::Color color)
 	return bg;
 }
 
+sf::RectangleShape Utils::setBG(sf::Texture* texture)
+{
+	sf::RectangleShape bg;
+	bg.setSize(SCREEN_SIZE);
+	bg.setTexture(texture);
+	bg.setPosition(sf::Vector2f(0, 0));
+	return bg;
+}
+
 sf::RectangleShape Utils::setRect(sf::Vector2f size, sf::Color color, sf::Color outlineColor, 
 	float thickness, sf::Vector2f position)
 {

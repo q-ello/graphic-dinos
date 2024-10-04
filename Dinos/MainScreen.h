@@ -5,6 +5,7 @@
 #include "LuckyDinoButton.h"
 #include "PartyScreen.h"
 #include "RestingScreen.h"
+#include "FightWelcomeScreen.h"
 
 class MainScreen : public ScreenBase
 {

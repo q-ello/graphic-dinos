@@ -13,6 +13,10 @@ void Player::save()
     {
         savefile << "MONEY: " << _money << "\n";
         for (auto& it : _currentParty) {
+            if (it == nullptr)
+            {
+                continue;
+            }
             savefile << "CURRENT " << it->type() << " " << it->name() << " " << it->strength() << " ";
             savefile << it->dexterity() << " " << it->intellect() << "\n";
         }
@@ -110,6 +114,21 @@ boolean Player::partyIsEmpty()
     }
 
     return true;
+}
+
+Terrain Player::newTerrain()
+{
+    switch (rand() % 3)
+    {
+    case 0:
+        return T_Plain;
+    case 1:
+        return T_River;
+        break;
+    default:
+        return T_Mountain;
+        break;
+    }
 }
 
 int Player::_money{ 100 };
