@@ -42,3 +42,20 @@ void FightWelcomeScreen::drawData()
 	_window->draw(_welcomeText);
 	_window->draw(_clueText);
 }
+
+void FightWelcomeScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
+{
+	startFight();
+}
+
+void FightWelcomeScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
+{
+	startFight();
+}
+
+void FightWelcomeScreen::startFight()
+{
+
+	_show = false;
+	return;
+}
