@@ -87,8 +87,10 @@ bool Button::handleMouseReleased(int mouseX, int mouseY)
 	if (_almostExecuted && getBounds().contains(sf::Vector2f(static_cast<float>(mouseX),
 		static_cast<float>(mouseY))))
 	{
+		toggleAlmostExecuted(false);
 		return true;
 	}
+	toggleAlmostExecuted(false);
 	return false;
 }
 

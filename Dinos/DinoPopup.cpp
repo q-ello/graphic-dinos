@@ -30,8 +30,8 @@ DinoPopup::DinoPopup(boolean isParty)
 
     for (int i = 0; i < dinos.size(); i++)
     {
-        sf::Vector2f dinoPos = sf::Vector2f(xPos + xOffset * (i % 3),
-            yPos + yOffset * std::floor(i / 3));
+        sf::Vector2f dinoPos = sf::Vector2f(static_cast<float>(xPos + xOffset * (i % 3)),
+            static_cast<float>(yPos + yOffset * std::floor(i / 3)));
         _buttons.push_back(new DinoCard(20, "REPLACE", C_DARK_GREEN, dinoPos, i, i == 0));
     }
 

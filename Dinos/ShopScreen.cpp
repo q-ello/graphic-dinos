@@ -17,6 +17,7 @@ void ShopScreen::drawData()
 	}
 	_updateBtn->draw(_window);
 	_window->draw(_moneyText);
+	_returnBtn->draw(_window);
 }
 
 void ShopScreen::updateShop()
@@ -58,6 +59,8 @@ void ShopScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 		_updateBtn->toggleAlmostExecuted(true);
 		return;
 	}
+
+	ScreenBase::handleKeyPressedEvent(code);
 }
 
 void ShopScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
@@ -74,11 +77,7 @@ void ShopScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 		return;
 	}
 
-	if (code == sf::Keyboard::Scancode::Escape)
-	{
-		_show = false;
-		return;
-	}
+	ScreenBase::handleKeyReleasedEvent(code);
 }
 
 void ShopScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent button)
@@ -93,7 +92,11 @@ void ShopScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butto
 			}
 		}
 	}
-	_updateBtn->handleMousePressed(button.x, button.y);
+	if (_updateBtn->handleMousePressed(button.x, button.y))
+	{
+		return;
+	}
+	ScreenBase::handleMouseButtonPressedEvent(button);
 }
 
 void ShopScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
@@ -109,7 +112,9 @@ void ShopScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent butt
 	if (_updateBtn->handleMouseReleased(button.x, button.y))
 	{
 		updateShop();
+		return;
 	}
+	ScreenBase::handleMouseButtonReleasedEvent(button);
 }
 
 void ShopScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)

@@ -33,3 +33,5 @@ enum E_Choice
 	C_CHANGE,
 	C_UPDATE_SHOP
 };
+
+enum Terrain { T_Plain, T_River, T_Mountain };

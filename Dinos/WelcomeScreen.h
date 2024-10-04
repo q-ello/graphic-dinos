@@ -6,7 +6,8 @@ class WelcomeScreen : public ScreenBase
 {
 public:
 	using ScreenBase::ScreenBase;
-private:
+	WelcomeScreen();
+protected:
 	sf::Text _welcomeText;
 	sf::Text _clueText;
 
@@ -18,5 +19,4 @@ private:
 	void handleCloseWindowEvent() override;
 
 	void goToMainScreen();
-
 };

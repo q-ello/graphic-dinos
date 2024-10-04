@@ -26,6 +26,7 @@ void PartyScreen::drawData()
 		card->draw(_window);
 	}
 	_window->draw(_moneyText);
+	_returnBtn->draw(_window);
 }
 
 void PartyScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
@@ -41,6 +42,8 @@ void PartyScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 		_dinos[_activeIndex]->toggleAlmostExecuted(true);
 		return;
 	}
+
+	ScreenBase::handleKeyPressedEvent(code);
 }
 
 void PartyScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
@@ -51,11 +54,7 @@ void PartyScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 		return;
 	}
 
-	if (code == sf::Keyboard::Scancode::Escape)
-	{
-		_show = false;
-		return;
-	}
+	ScreenBase::handleKeyReleasedEvent(code);
 }
 
 void PartyScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent button)
@@ -67,6 +66,7 @@ void PartyScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butt
 				return;
 			}
 	}
+	ScreenBase::handleMouseButtonPressedEvent(button);
 }
 
 void PartyScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
@@ -79,6 +79,7 @@ void PartyScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent but
 			return;
 		}
 	}
+	ScreenBase::handleMouseButtonReleasedEvent(button);
 }
 
 void PartyScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)

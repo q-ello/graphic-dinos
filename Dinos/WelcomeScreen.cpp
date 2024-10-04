@@ -1,5 +1,9 @@
 #include "WelcomeScreen.h"
 
+WelcomeScreen::WelcomeScreen()
+{
+}
+
 void WelcomeScreen::setScreenData()
 {
 	_welcomeText = Utils::setText(100, C_BRIGHT_GREEN, "Welcome to\nDino's Battle!",

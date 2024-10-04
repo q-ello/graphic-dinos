@@ -15,6 +15,7 @@ class ScreenBase
 {
 public:
 	ScreenBase(sf::RenderWindow* window);
+	ScreenBase();
 
 	void show();
 
@@ -24,6 +25,7 @@ protected:
 	Popup* _popup;
 	sf::RectangleShape _bg;
 	boolean _show{ true };
+	Button* _returnBtn;
 
 	virtual void setScreenData() = 0;
 	virtual void setMoneyData();

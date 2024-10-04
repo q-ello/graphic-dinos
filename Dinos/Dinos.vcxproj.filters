@@ -87,6 +87,9 @@
     <ClCompile Include="RestingScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="FightWelcomeScreen.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files\Popups</Filter>
     </ClInclude>
     <ClInclude Include="RestingScreen.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="FightWelcomeScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,8 +5,6 @@
 
 enum EDinoName { N_Tyranosaurus, N_Tryceratops, N_Brontozaurus };
 
-enum Terrain { T_Plain, T_River, T_Mountain };
-
 enum DinoState { D_Idle = 3, D_Walking = 0, D_Attacking = 1, D_Dying  = 2};
 
 static EDinoName convertToEnum(const std::string& str)
