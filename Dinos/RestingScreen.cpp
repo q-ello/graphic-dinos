@@ -2,10 +2,10 @@
 
 void RestingScreen::setScreenData()
 {
-	const float xPos = 50;
-	const float yPos = 100;
-	const float xOffset = 300;
-	const float yOffset = 300;
+	const int xPos = 50;
+	const int yPos = 100;
+	const int xOffset = 300;
+	const int yOffset = 300;
 	std::vector<Dino*> resting = Player::owned();
 	if (resting.size() > 6)
 	{
@@ -13,7 +13,8 @@ void RestingScreen::setScreenData()
 	}
 	for (int i = 0; i < resting.size(); i++)
 	{
-		sf::Vector2f position{ xPos + xOffset * (i % 3), static_cast<float>(yPos + yOffset * std::floor(i / 3)) };
+		sf::Vector2f position = sf::Vector2f(xPos + xOffset * (i % 3),
+			yPos + yOffset * std::floor(i / 3));
 		_dinos.push_back(new DinoCard(30, "ADD TO PARTY", C_DARK_GREEN, position, C_CHANGE, 
 			std::move(resting[i]), i == _activeIndex));
 	}
@@ -44,6 +45,7 @@ void RestingScreen::updateDinoCards()
 	{
 		_dinos[i]->setDino(resting[i]);
 	}
+
 	if (_dinos.size() > resting.size())
 	{
 		_dinos.pop_back();

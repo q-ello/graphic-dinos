@@ -1,15 +1,22 @@
 #pragma once
-#include "ScreenEmptyBase.h"
+#include "ScreenBase.h"
 #include "MainScreen.h"
 
-class WelcomeScreen : public ScreenEmptyBase
+class WelcomeScreen : public ScreenBase
 {
 public:
-	using ScreenEmptyBase::ScreenEmptyBase;
-private:
+	using ScreenBase::ScreenBase;
+	WelcomeScreen();
+protected:
+	sf::Text _welcomeText;
+	sf::Text _clueText;
+
 	void setScreenData() override;
+	void drawData() override;
 
 	void handleKeyReleasedEvent(sf::Keyboard::Scancode code) override;
+	void handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button) override;
 	void handleCloseWindowEvent() override;
-	void goToNextScreen() override;
+
+	void goToMainScreen();
 };

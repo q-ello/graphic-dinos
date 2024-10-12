@@ -1,15 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "Button.h"
-#include "Dino.h"
 
 enum PopupType
 {
 	P_SAVE,
 	P_INFORM,
 	P_BUY,
-	P_CHANGE,
-	P_CONCEDE
+	P_CHANGE
 };
 
 class Popup
@@ -18,7 +16,6 @@ public:
 	Popup(const std::string& mainText, PopupType type = P_INFORM, const std::vector<std::string>& buttons = {}, 
 		std::vector<E_Choice> choices = {});
 	Popup();
-	Popup(const std::string& mainText, Dino* dino);
 	~Popup();
 
 	PopupType type()
@@ -32,7 +29,7 @@ public:
 	virtual int handleKeyReleasedEvent(sf::Keyboard::Scancode code);
 	void handleMouseButtonPressedEvent(int mouseX, int mouseY);
 	virtual int handleMouseButtonReleasedEvent(int mouseX, int mouseY);
-	void handleMouseMovedEvent(sf::Event::MouseMoveEvent event);
+	void handleMouseMovedEvent(int mouseX, int mouseY);
 	
 protected:
 	sf::Vector2f _size{ sf::Vector2f(200, 100) };
@@ -42,8 +39,7 @@ protected:
 	sf::RectangleShape _bg;
 	sf::RectangleShape _body;
 	int _activeIndex{ 0 };
-	PopupType _meaning{ P_INFORM };
-	Dino* _dino{ nullptr };
+	PopupType _meaning;
 	
 	void changeFocusedButton(int newIndex);
 };

@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Popups">
       <UniqueIdentifier>{93c2ecf4-7c2d-4632-8269-b74bf6f9b1c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Screens\Fight">
-      <UniqueIdentifier>{262519c1-4367-41ba-a1e9-41786c5bb75b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Screens\Fight">
-      <UniqueIdentifier>{6bec3562-8a9a-42ee-a90b-791aa9905f99}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,21 +87,18 @@
     <ClCompile Include="RestingScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenEmptyBase.cpp">
+    <ClCompile Include="FightWelcomeScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="FightFinalScreen.cpp">
-      <Filter>Source Files\Screens\Fight</Filter>
-    </ClCompile>
     <ClCompile Include="FightMainScreen.cpp">
-      <Filter>Source Files\Screens\Fight</Filter>
-    </ClCompile>
-    <ClCompile Include="FightWelcomeScreen.cpp">
-      <Filter>Source Files\Screens\Fight</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -158,17 +149,11 @@
     <ClInclude Include="RestingScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenEmptyBase.h">
+    <ClInclude Include="FightWelcomeScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="FightFinalScreen.h">
-      <Filter>Header Files\Screens\Fight</Filter>
-    </ClInclude>
     <ClInclude Include="FightMainScreen.h">
-      <Filter>Header Files\Screens\Fight</Filter>
-    </ClInclude>
-    <ClInclude Include="FightWelcomeScreen.h">
-      <Filter>Header Files\Screens\Fight</Filter>
+      <Filter>Header Files\Screens</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

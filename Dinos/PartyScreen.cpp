@@ -8,13 +8,13 @@ PartyScreen::~PartyScreen()
 void PartyScreen::setScreenData()
 {
 
-	const float xPos = 80;
-	const float yPos = 240;
-	const float xOffset = 300;
+	const int xPos = 80;
+	const int yPos = 240;
+	const int xOffset = 300;
 	std::vector<Dino*> party = Player::party();
 	for (int i = 0; i < party.size(); i++)
 	{
-		sf::Vector2f dinoPosition{ xPos + xOffset * i, yPos };
+		sf::Vector2f dinoPosition = sf::Vector2f(xPos + xOffset * i, yPos);
 		_dinos.push_back(new DinoCard(30, "CHANGE", C_DARK_GREEN, dinoPosition, C_CHANGE, std::move(party[i]), i == _activeIndex));
 	}
 }
@@ -71,7 +71,7 @@ void PartyScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butt
 
 void PartyScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
 {
-	for (int i = 0; i < _dinos.size(); i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (_dinos[i]->handleMouseReleased(button.x, button.y))
 		{
@@ -84,7 +84,7 @@ void PartyScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent but
 
 void PartyScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
 {
-	for (int i = 0; i < _dinos.size(); i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (_dinos[i]->handleMouseMovement(moveEvent.x, moveEvent.y))
 		{

@@ -131,19 +131,6 @@ Terrain Player::newTerrain()
     }
 }
 
-void Player::dinoDied(Dino* dino)
-{
-    int i = 0;
-    for (; i < 3; i++)
-    {
-        if (_currentParty[i] == dino)
-        {
-            _currentParty[i] = nullptr;
-            return;
-        }
-    }
-}
-
 int Player::_money{ 100 };
 std::vector<Dino*> Player::_ownedDinosaurs{};
 std::vector<Dino*> Player::_currentParty{};

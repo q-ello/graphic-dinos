@@ -1,10 +1,21 @@
 #include "WelcomeScreen.h"
+
+WelcomeScreen::WelcomeScreen()
+{
+}
+
 void WelcomeScreen::setScreenData()
 {
 	_welcomeText = Utils::setText(100, C_BRIGHT_GREEN, "Welcome to\nDino's Battle!",
 		sf::Vector2f(130, 250));
 
-	ScreenEmptyBase::setScreenData();
+	_clueText = Utils::setClueText(C_BRIGHT_GREEN);
+}
+
+void WelcomeScreen::drawData()
+{
+	_window->draw(_welcomeText);
+	_window->draw(_clueText);
 }
 
 void WelcomeScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
@@ -14,19 +25,23 @@ void WelcomeScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 		_window->close();
 		return;
 	}
-
-	ScreenEmptyBase::handleKeyReleasedEvent(code);
+	goToMainScreen();
 }
 
-void WelcomeScreen::goToNextScreen()
+void WelcomeScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
 {
-	MainScreen* mainScreen = new MainScreen(std::move(_window));
-	mainScreen->show();
-	delete mainScreen;
+	goToMainScreen();
 }
 
 void WelcomeScreen::handleCloseWindowEvent()
 {
 	_window->close();
 	return;
+}
+
+void WelcomeScreen::goToMainScreen()
+{
+	MainScreen* mainScreen = new MainScreen(std::move(_window));
+	mainScreen->show();
+	delete mainScreen;
 }

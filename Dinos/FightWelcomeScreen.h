@@ -1,17 +1,22 @@
 #pragma once
-#include "ScreenEmptyBase.h"
-#include "FightMainScreen.h"
+#include "ScreenBase.h"
 
-class FightWelcomeScreen : public ScreenEmptyBase
+class FightWelcomeScreen : public ScreenBase
 {
 public:
-	using ScreenEmptyBase::ScreenEmptyBase;
+	using ScreenBase::ScreenBase;
 private:
 	void setScreenData() override;
 	void createBG() override;
+	void drawData() override;
 
+	sf::Text _welcomeText;
+	sf::Text _clueText;
 	Terrain _terrain;
 	sf::Texture _texture;
 
-	void goToNextScreen() override;
+	void handleKeyReleasedEvent(sf::Keyboard::Scancode code) override;
+	void handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button) override;
+
+	void startFight();
 };

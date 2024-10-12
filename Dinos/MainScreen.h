@@ -28,7 +28,5 @@ private:
 
 	void changeFocusedButton(std::pair<int, int> index, bool withArrows = true);
 	void changeState();
-
-	void setDinosData();
 };
 

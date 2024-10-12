@@ -135,7 +135,6 @@
     <ClCompile Include="Dino.cpp" />
     <ClCompile Include="DinoCard.cpp" />
     <ClCompile Include="DinoPopup.cpp" />
-    <ClCompile Include="FightFinalScreen.cpp" />
     <ClCompile Include="FightMainScreen.cpp" />
     <ClCompile Include="FightWelcomeScreen.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -146,7 +145,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="RestingScreen.cpp" />
-    <ClCompile Include="ScreenEmptyBase.cpp" />
     <ClCompile Include="ShopScreen.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WelcomeScreen.cpp" />
@@ -158,7 +156,7 @@
     <ClInclude Include="Dino.h" />
     <ClInclude Include="DinoCard.h" />
     <ClInclude Include="DinoPopup.h" />
-    <ClInclude Include="FightFinalScreen.h" />
+    <ClInclude Include="Fight.h" />
     <ClInclude Include="FightMainScreen.h" />
     <ClInclude Include="FightWelcomeScreen.h" />
     <ClInclude Include="Game.h" />
@@ -168,7 +166,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Popup.h" />
     <ClInclude Include="RestingScreen.h" />
-    <ClInclude Include="ScreenEmptyBase.h" />
     <ClInclude Include="ShopScreen.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils.h" />
