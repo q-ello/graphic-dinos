@@ -3,8 +3,7 @@
 void ShopScreen::setScreenData()
 {
 	const int textSize = 25;
-	_updateBtn = new Button(40, "U - Update Shop", C_DARK_GREEN, sf::Vector2f(600, 700),
-		C_UPDATE_SHOP);
+	_updateBtn = new Button(40, "U - Update Shop", C_DARK_GREEN, sf::Vector2f(600, 700));
 
 	updateShop();
 }
@@ -23,10 +22,10 @@ void ShopScreen::drawData()
 void ShopScreen::updateShop()
 {
 	const int textSize = 40;
-	const int xPos = 50;
-	const int yPos = 100;
-	const int xOffset = 300;
-	const int yOffset = 300;
+	const float xPos = 50;
+	const float yPos = 100;
+	const float xOffset = 300;
+	const float yOffset = 300;
 
 	_shopList.clear();
 	for (int i = 0; i < 6; i++)
@@ -106,13 +105,11 @@ void ShopScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent butt
 		if (_shopList[i]->handleMouseReleased(button.x, button.y))
 			{
 				showBuyPopup();
-				return;
 			}
 	}
 	if (_updateBtn->handleMouseReleased(button.x, button.y))
 	{
 		updateShop();
-		return;
 	}
 	ScreenBase::handleMouseButtonReleasedEvent(button);
 }

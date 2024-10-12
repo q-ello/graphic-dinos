@@ -32,10 +32,7 @@ public:
 		toggleFocus(false);
 	}
 
-	void setDino(Dino* newDino)
-	{
-		_dino = newDino;
-	}
+	void setDino(Dino* newDino);
 
 private:
 	Dino* _dino;

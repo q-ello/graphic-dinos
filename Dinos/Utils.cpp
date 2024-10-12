@@ -3,12 +3,8 @@
 sf::Text Utils::setText(int size, sf::Color color, 
 	const std::string& string, sf::Vector2f position)
 {
-	sf::Text text;
-	text.setCharacterSize(size);
-	text.setFillColor(color);
-	text.setString(string);
+	sf::Text text = Utils::setText(size, color, string);
 	text.setPosition(position);
-	text.setFont(_font);
 	return text;
 }
 
@@ -19,6 +15,7 @@ sf::Text Utils::setText(int size, sf::Color color, const std::string& string)
 	text.setFillColor(color);
 	text.setString(string);
 	text.setFont(_font);
+	text.setOutlineThickness(1);
 	return text;
 }
 
@@ -96,6 +93,17 @@ std::pair<int, int> Utils::handleArrows(sf::Keyboard::Scancode code)
 		direction.second = 1;
 	}
 	return direction;
+}
+
+sf::Vector2f Utils::alignToCenter(sf::Text* text, sf::Vector2f space)
+{
+	const sf::Vector2f textSize = text->getLocalBounds().getSize();
+	return alignToCenter(textSize, space);
+}
+
+sf::Vector2f Utils::alignToCenter(sf::Vector2f object, sf::Vector2f space)
+{
+	return { (space.x - object.x) / 2, (space.y - object.y) / 2 };
 }
 
 sf::Font Utils::_font;

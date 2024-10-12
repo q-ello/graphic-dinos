@@ -30,6 +30,9 @@ public:
 
 	static std::pair<int, int> handleArrows(sf::Keyboard::Scancode code);
 
+	static sf::Vector2f alignToCenter(sf::Text* text, sf::Vector2f space = SCREEN_SIZE);
+	static sf::Vector2f alignToCenter(sf::Vector2f object, sf::Vector2f space = SCREEN_SIZE);
+
 private:
 	static sf::Font _font;
 	static sf::Clock _clock;

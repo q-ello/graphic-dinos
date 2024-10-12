@@ -31,6 +31,8 @@ void MainScreen::setScreenData()
 		sf::Vector2f(xOriginal + xOffset, yOriginal + 2 * yOffset), C_LUCKY_DINO));
 	_buttons[3].push_back(new Button(textSize, "QUIT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + 3 * yOffset), C_QUIT));
+
+	setDinosData();
 }
 
 void MainScreen::drawData()
@@ -45,24 +47,17 @@ void MainScreen::drawData()
 	
 	_window->draw(_moneyText);
 
-	const sf::Vector2f partyPosition = sf::Vector2f(550, 250);
-	const int xDinoOffset = 50;
-	const int yOffset = 100;
-	std::vector<Dino*> party = Player::party();
-	for (int i = 0; i < party.size(); i++)
+	for (Dino* dino : Player::party())
 	{
-		if (party[i] == nullptr)
+		if (dino != nullptr)
 		{
-			continue;
+			dino->drawInMain(_window);
 		}
-		party[i]->drawInMain(_window, sf::Vector2f(partyPosition.x + xDinoOffset * i, partyPosition.y));
-
 	}
-	std::vector<Dino*> resting = Player::owned();
-	for (int i = 0; i < resting.size(); i++)
-	{
-		resting[i]->drawInMain(_window, sf::Vector2f(partyPosition.x + xDinoOffset * i, partyPosition.y + yOffset));
 
+	for (Dino* dino : Player::owned())
+	{
+		dino->drawInMain(_window);
 	}
 }
 
@@ -184,7 +179,7 @@ void MainScreen::changeState()
 	case C_LUCKY_DINO:
 	{
 		Dino* dino = Dino::generateDino();
-		_popup = new Popup("You got a lucky dino!");
+		_popup = new Popup("You got a lucky dino!", dino);
 		Player::addDino(std::move(dino));
 		break;
 	}
@@ -217,10 +212,35 @@ void MainScreen::changeState()
 		FightWelcomeScreen* fight = new FightWelcomeScreen(_window);
 		fight->show();
 		delete fight;
+		break;
 	}
 	case C_QUIT:
 		handleCloseWindowEvent();
 		break;
 	}
 	_buttons[_activeIndex.first][_activeIndex.second]->toggleAlmostExecuted(false);
+	setDinosData();
+	setMoneyData();
+}
+
+void MainScreen::setDinosData()
+{
+	const sf::Vector2f partyPosition{ 600, 250 };
+	const float xDinoOffset = 50;
+	const float yOffset = 100;
+	std::vector<Dino*> party = Player::party();
+	for (int i = 0; i < party.size(); i++)
+	{
+		if (party[i] == nullptr)
+		{
+			continue;
+		}
+		party[i]->setDataForMain({ partyPosition.x + xDinoOffset * i, partyPosition.y + 25 });
+
+	}
+	std::vector<Dino*> resting = Player::owned();
+	for (int i = 0; i < resting.size(); i++)
+	{
+		resting[i]->setDataForMain({ partyPosition.x + xDinoOffset * i, partyPosition.y + yOffset + 25 });
+	}
 }

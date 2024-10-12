@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Utils.h"
 #include "Popup.h"
+#include "DinoCard.h"
 
 enum saveChoice
 {
@@ -26,6 +27,7 @@ protected:
 	sf::RectangleShape _bg;
 	boolean _show{ true };
 	Button* _returnBtn;
+	bool _waitingInput{ true };
 
 	virtual void setScreenData() = 0;
 	virtual void setMoneyData();

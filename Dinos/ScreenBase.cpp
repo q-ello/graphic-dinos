@@ -19,12 +19,16 @@ void ScreenBase::show()
 
 	setScreenData();
 	createBG();
+	setMoneyData();
 
 	while (true)
 	{
-		setMoneyData();
 		while (_window->pollEvent(event))
 		{
+			if (!_waitingInput)
+			{
+				break;
+			}
 			switch (event.type)
 			{
 			case sf::Event::EventType::Closed:
@@ -66,7 +70,7 @@ void ScreenBase::show()
 			case sf::Event::EventType::MouseButtonReleased:
 				if (_popup != nullptr)
 				{
-					int choice = _popup->handleMouseButtonReleasedEvent(event.mouseButton.x, 
+					int choice = _popup->handleMouseButtonReleasedEvent(event.mouseButton.x,
 						event.mouseButton.y);
 					handlePopupChoice(choice);
 				}
@@ -78,8 +82,7 @@ void ScreenBase::show()
 			case sf::Event::EventType::MouseMoved:
 				if (_popup != nullptr)
 				{
-					_popup->handleMouseMovedEvent(event.mouseButton.x,
-						event.mouseButton.y);
+					_popup->handleMouseMovedEvent(event.mouseMove);
 				}
 				else
 				{
@@ -92,6 +95,7 @@ void ScreenBase::show()
 
 			_window->clear();
 		}
+		
 
 		drawBG();
 		drawData();
