@@ -10,15 +10,14 @@ Popup::Popup(const std::string& mainText, PopupType type, const std::vector<std:
 
 	sf::Vector2f size = _mainText.getLocalBounds().getSize();
 	sf::Vector2f bodySize = sf::Vector2f(size.x + 20, size.y + 20);
-	sf::Vector2f bodyPos = sf::Vector2f((SCREEN_SIZE.x - bodySize.x) / 2,
-		(SCREEN_SIZE.y - bodySize.y) / 2);
+	sf::Vector2f bodyPos = Utils::alignToCenter(bodySize);
 	
 	if (!buttons.empty())
 	{
 		bodySize.y += 25;
 
 		const sf::Vector2f buttonPos = sf::Vector2f(bodyPos.x + 10, bodyPos.y + bodySize.y - 30);
-		const int buttonOffset = 50;
+		const int buttonOffset = 100;
 
 		for (int i = 0; i < buttons.size(); i++)
 		{
@@ -37,6 +36,23 @@ Popup::Popup()
 {
 }
 
+Popup::Popup(const std::string& mainText, Dino* dino)
+	: _dino{ dino }
+{
+	_mainText = Utils::setText(40, C_DARK_GREEN, mainText);
+	_bg = Utils::setBG(C_SEMITRANSPARENT);
+	_clueText = Utils::setClueText(C_DARK_GREEN);
+
+	sf::Vector2f size = { 400, 400 };
+	sf::Vector2f bodyPos = Utils::alignToCenter(size);
+
+	_body = Utils::setRect(size, C_DULL_GREEN, C_DARK_GREEN, 3, bodyPos);
+	_mainText.setPosition(sf::Vector2f(bodyPos.x + 10,
+		bodyPos.y + 5));
+
+	_dino->setDataForDrawing({ bodyPos.x + 60, bodyPos.y + 60 });
+}
+
 Popup::~Popup()
 {
 	_buttons.clear();
@@ -51,6 +67,11 @@ void Popup::draw(sf::RenderWindow* window)
 	for (auto& button : _buttons)
 	{
 		button->draw(std::move(window));
+	}
+
+	if (_dino != nullptr)
+	{
+		_dino->drawInParty(window);
 	}
 }
 
@@ -124,11 +145,11 @@ int Popup::handleMouseButtonReleasedEvent(int mouseX, int mouseY)
 	return C_NOTHING;
 }
 
-void Popup::handleMouseMovedEvent(int mouseX, int mouseY)
+void Popup::handleMouseMovedEvent(sf::Event::MouseMoveEvent event)
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{
-		if (_buttons[i]->handleMouseMovement(mouseX, mouseY))
+		if (_buttons[i]->handleMouseMovement(event.x, event.y))
 		{
 			changeFocusedButton(i);
 			return;

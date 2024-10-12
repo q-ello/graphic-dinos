@@ -11,25 +11,25 @@ void FightWelcomeScreen::setScreenData()
 	case T_Plain:
 		_texture.loadFromFile("images/plain.png");
 		terrainStr = "PLAIN";
-		bonusStr = "STRENGTH";
+		bonusStr = "DINOSTR";
 		break;
 	case T_Mountain:
 		_texture.loadFromFile("images/mountain.png");
 		terrainStr = "MOUNTAIN";
-		bonusStr = "INTELLECT";
+		bonusStr = "DINOINT";
 		break;
 	default:
 		_texture.loadFromFile("images/river.png");
 		terrainStr = "RIVER";
-		bonusStr = "DEXTERITY";
+		bonusStr = "DINODEX";
 		break;
 	}
 
-	_welcomeText = Utils::setText(50, C_DARK_GREEN, "You are fighting in " + terrainStr + ".\n" + bonusStr + " is doubled.",
-		sf::Vector2f(150, 300));
+	_welcomeText = Utils::setText(50, C_DARK_GREEN, "You are fighting in " + terrainStr + ".\n" + 
+		"Damage of " + bonusStr + " is doubled.", sf::Vector2f(100, 300));
 	_welcomeText.setOutlineThickness(4);
-	_clueText = Utils::setClueText(C_DARK_GREEN);
-	_clueText.setOutlineThickness(1);
+
+	ScreenEmptyBase::setScreenData();
 }
 
 void FightWelcomeScreen::createBG()
@@ -37,25 +37,11 @@ void FightWelcomeScreen::createBG()
 	_bg = Utils::setBG(&_texture);
 }
 
-void FightWelcomeScreen::drawData()
+void FightWelcomeScreen::goToNextScreen()
 {
-	_window->draw(_welcomeText);
-	_window->draw(_clueText);
-}
-
-void FightWelcomeScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
-{
-	startFight();
-}
-
-void FightWelcomeScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
-{
-	startFight();
-}
-
-void FightWelcomeScreen::startFight()
-{
-
+	FightMainScreen* fight = new FightMainScreen(_window, &_texture, _terrain);
+	fight->show();
+	delete fight;
 	_show = false;
 	return;
 }

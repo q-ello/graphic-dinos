@@ -7,6 +7,7 @@ Button::Button(int textSize, const std::string& text, sf::Color color, sf::Vecto
 	, _meaning {meaning}
 {
 	_text = Utils::setText(textSize, focused ? C_FOCUSED : color, text, position);
+	_text.setOutlineThickness(2);
 }
 
 Button::Button()

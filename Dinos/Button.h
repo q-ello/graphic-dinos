@@ -7,7 +7,7 @@ class Button
 {
 public:
 	Button(int textSize, const std::string& text, sf::Color color, sf::Vector2f position, 
-		int meaning, bool focused = false);
+		int meaning = 0, bool focused = false);
 
 	Button();
 	~Button() {};

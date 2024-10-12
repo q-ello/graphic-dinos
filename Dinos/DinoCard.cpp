@@ -9,7 +9,7 @@ DinoCard::DinoCard(int textSize, const std::string& text, sf::Color color, sf::V
 	_body.setPosition(position);
 	_body.setFillColor(focused ? C_ALMOST_TRANSPARENT : C_TRANSPARENT);
 	const sf::Vector2f textBodySize = _text.getLocalBounds().getSize();
-	sf::Vector2f textPosition = sf::Vector2f(position.x + (DINOCARD_SIZE.x - textBodySize.x) / 2, 
+	sf::Vector2f textPosition = sf::Vector2f(position.x + (DINOCARD_SIZE.x - textBodySize.x) / 2,
 		position.y + 210);
 	_text.setPosition(textPosition);
 
@@ -36,7 +36,7 @@ void DinoCard::draw(sf::RenderWindow* window)
 		case C_BUY:
 			_dino->drawForShop(window);
 			break;
-		case C_CHANGE:
+		default:
 			_dino->drawInParty(window);
 		}
 	}
@@ -67,6 +67,16 @@ int DinoCard::dinoCost()
 std::string DinoCard::dinoName() const
 {
 	return _dino->name();
+}
+
+void DinoCard::setDino(Dino* newDino)
+{
+	_dino = newDino;
+	if (_dino != nullptr)
+	{
+		sf::Vector2f position = _body.getPosition() + sf::Vector2f(5, 50);
+		_dino->setDataForDrawing(position);
+	}
 }
 
 sf::FloatRect DinoCard::getBounds()
