@@ -55,16 +55,6 @@ sf::RectangleShape Utils::setRect(sf::Vector2f size, sf::Color color, sf::Color 
 	return rect;
 }
 
-UINT Utils::frame()
-{
-	if (_clock.getElapsedTime().asMilliseconds() > 300)
-	{
-		_clock.restart();
-		_frame++;
-	}
-	return _frame;
-}
-
 boolean Utils::keyIsArrow(sf::Keyboard::Scancode code)
 {
 	return code == sf::Keyboard::Scan::Left || code == sf::Keyboard::Scan::A

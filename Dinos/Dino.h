@@ -51,8 +51,13 @@ public:
 
     static Dino* generateDino();
 
+<<<<<<< HEAD
     //draw in different screens
     void setDataForDrawing(sf::Vector2f position);
+=======
+    void setDataForDrawing(sf::Vector2f position, boolean enemy = false);
+
+>>>>>>> 0d96cc83f140eb7dd43676eac8e44306101e1709
     void drawForShop(sf::RenderWindow* window);
     void drawInParty(sf::RenderWindow* window);
     void setDataForMain(sf::Vector2f position);
@@ -84,6 +89,8 @@ public:
     void changeDirection();
     void showNumText();
 
+    void offset();
+
 private:
     int _STR;
     int _DEX;
@@ -94,8 +101,12 @@ private:
     Terrain _type;
     int _activeFrame{ 0 };
     DinoState _state{ D_Idle };
+<<<<<<< HEAD
     bool _animComplete{ false };
     bool _isCurrent { false };
+=======
+    sf::Vector2f _offset{ 0, 0 };
+>>>>>>> 0d96cc83f140eb7dd43676eac8e44306101e1709
 
     //stuff for render
     sf::Sprite _sprite;
