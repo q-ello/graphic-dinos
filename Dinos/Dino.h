@@ -45,40 +45,9 @@ public:
         return _HP;
     }
 
-<<<<<<< HEAD
-    void takeDamage(int dmg) {
-        _HP -= dmg;
-        if (_HP < 0)
-            _HP = 0;
-    }
-
-    void Regenerate() {
-        _HP = 100;
-    }
-
-<<<<<<< HEAD
-    //draw in different screens
-    void setDataForDrawing(sf::Vector2f position);
-=======
-    void setDataForDrawing(sf::Vector2f position, boolean enemy = false);
-
->>>>>>> 0d96cc83f140eb7dd43676eac8e44306101e1709
-    void drawForShop(sf::RenderWindow* window);
-    void drawInParty(sf::RenderWindow* window);
-    void setDataForMain(sf::Vector2f position);
-    void drawInMain(sf::RenderWindow* window);
-    void setFightData(sf::Vector2f position, Terrain terrain, bool turnedLeft = false, bool isCurrent = true, int number = 0);
-    void drawInFight(sf::RenderWindow* window);
-
-    void resetActiveFrame()
-    {
-        _activeFrame = 0;
-    }
-=======
     //fight logic
     bool takeDamage(int dmg);
     void regenerate();
->>>>>>> 0176da6 (now it's acceptable)
 
     static Dino* generateDino();
 

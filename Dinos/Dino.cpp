@@ -164,7 +164,7 @@ Dino* Dino::generateDino()
     return new Dino(type, DinoName, rand() % 20 + 10, rand() % 20 + 10, rand() % 20 + 10);
 }
 
-void Dino::setDataForDrawing(sf::Vector2f position, boolean enemy)
+void Dino::setDataForDrawing(sf::Vector2f position)
 {
     _state = D_Idle;
     _sprite.setScale(sf::Vector2f(3, 3));
@@ -245,12 +245,12 @@ void Dino::drawInMain(sf::RenderWindow* window)
     window->draw(_sprite);
 }
 
-<<<<<<< HEAD
 void Dino::offset()
 {
     const sf::Vector2f dinoSize{ _sprite.getGlobalBounds().getSize() };
-    _offset = sf::Vector2f( dinoSize.x / 2, dinoSize.y / 2 );
-=======
+    _offset = sf::Vector2f(dinoSize.x / 2, dinoSize.y / 2);
+}
+
 void Dino::setFightData(sf::Vector2f position, Terrain terrain, bool turnedLeft, bool isCurrent, int number)
 {
     _isCurrent = isCurrent;
@@ -406,5 +406,4 @@ void Dino::changeDirection()
 void Dino::showNumText()
 {
     _isCurrent = !_isCurrent;
->>>>>>> 0176da6 (now it's acceptable)
 }

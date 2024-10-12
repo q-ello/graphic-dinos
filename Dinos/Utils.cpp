@@ -97,5 +97,3 @@ sf::Vector2f Utils::alignToCenter(sf::Vector2f object, sf::Vector2f space)
 }
 
 sf::Font Utils::_font;
-sf::Clock Utils::_clock;
-UINT Utils::_frame = 0;
