@@ -445,7 +445,7 @@ void FightMainScreen::fightEnded(bool won)
     else
     {
         pay = 40 * static_cast<int>(_enemies.size());
-        finalText = "You lost...\nYou lose " + std::to_string(pay);
+        finalText = "You lost...\nYou lose " + std::to_string(pay * -1);
     }
 
     Player::addCash(pay);

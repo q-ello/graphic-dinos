@@ -9,6 +9,10 @@ public:
 	DinoCard(int textSize, const std::string& text, sf::Color color, sf::Vector2f position,
 		int meaning, Dino* dino, bool focused = false);
 
+	~DinoCard()
+	{
+	}
+
 	void draw(sf::RenderWindow* window) override;
 
 	void toggleFocus(bool focus) override;

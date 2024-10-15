@@ -129,6 +129,23 @@ void ShopScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
 void ShopScreen::setNewActiveIndex(std::pair<int, int> direction)
 {
 	_activeIndex = (direction.first + direction.second * 3 + _activeIndex + 6) % 6;
+	
+	bool everythingSoldOut = true;
+	for (auto& button : _shopList)
+	{
+		if (!button->isSold())
+		{
+			everythingSoldOut = false;
+			break;
+		}
+	}
+
+	if (everythingSoldOut)
+	{
+		updateShop();
+		return;
+	}
+
 	if (_shopList[_activeIndex]->isSold())
 	{
 		setNewActiveIndex(direction);
@@ -169,6 +186,7 @@ void ShopScreen::handleDiffPopupChoice(int choice)
 			}
 			else
 			{
+				delete _popup;
 				_popup = new Popup("You do not have\nenough money.");
 			}
 			
@@ -180,6 +198,7 @@ void ShopScreen::showBuyPopup()
 {
 	const std::string dinoName = _shopList[_activeIndex]->dinoName();
 	const int dinoCost = _shopList[_activeIndex]->dinoCost();
+	delete _popup;
 	_popup = new Popup("Do you want to\nbuy " + dinoName + " for " + std::to_string(dinoCost) + "?",
 		P_BUY, { "YES", "NO" }, { C_YES, C_NO });
 }

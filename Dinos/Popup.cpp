@@ -56,6 +56,7 @@ Popup::Popup(const std::string& mainText, Dino* dino)
 Popup::~Popup()
 {
 	_buttons.clear();
+	delete _dino;
 }
 
 void Popup::draw(sf::RenderWindow* window)

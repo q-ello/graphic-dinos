@@ -1,2 +1,1 @@
-MONEY: 355
-CURRENT INT Tyranosaurus 16 21 29
+MONEY: 0
