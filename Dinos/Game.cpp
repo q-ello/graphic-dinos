@@ -12,23 +12,6 @@ Game::~Game()
 {
 	Player::clearData();
 }
-/*
-* void Game::drawParty(int x, int y)
-{
-	for (int i = 0; i < _currentParty.size(); i++)
-	{
-		_currentParty[i]->draw(_window, Idle, x + 20 * i, y);
-	}
-}
-
-void Game::drawResting(int x, int y)
-{
-	for (int i = 0; i < _ownedDinosaurs.size(); i++)
-	{
-		_ownedDinosaurs[i]->draw(_window, Idle, x + 20 * i, y);
-	}
-}
-*/
 
 
 void Game::start()

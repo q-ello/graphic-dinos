@@ -10,7 +10,7 @@ public:
 	using ScreenBase::ScreenBase;
 	~PartyScreen();
 protected:
-	std::vector<DinoCard*> _dinos;
+	std::vector<DinoCard> _dinos;
 	int _activeIndex{ 0 };
 
 	void setScreenData() override;

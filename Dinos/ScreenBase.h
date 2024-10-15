@@ -23,10 +23,10 @@ public:
 protected:
 	sf::RenderWindow* _window;
 	sf::Text _moneyText;
-	Popup* _popup;
+	std::unique_ptr<Popup> _popup;
 	sf::RectangleShape _bg;
 	boolean _show{ true };
-	Button* _returnBtn;
+	Button _returnBtn;
 	bool _waitingInput{ true };
 
 	virtual void setScreenData() = 0;

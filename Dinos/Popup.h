@@ -9,7 +9,8 @@ enum PopupType
 	P_INFORM,
 	P_BUY,
 	P_CHANGE,
-	P_CONCEDE
+	P_CONCEDE,
+	P_LUCKY_DINO
 };
 
 class Popup
@@ -18,7 +19,7 @@ public:
 	Popup(const std::string& mainText, PopupType type = P_INFORM, const std::vector<std::string>& buttons = {}, 
 		std::vector<E_Choice> choices = {});
 	Popup();
-	Popup(const std::string& mainText, Dino* dino);
+	Popup(const std::string& mainText, std::shared_ptr<Dino> dino);
 	~Popup();
 
 	PopupType type()
@@ -37,13 +38,13 @@ public:
 protected:
 	sf::Vector2f _size{ sf::Vector2f(200, 100) };
 	sf::Text _mainText;
-	std::vector<Button*> _buttons;
+	std::vector<Button> _buttons;
 	sf::Text _clueText;
 	sf::RectangleShape _bg;
 	sf::RectangleShape _body;
 	int _activeIndex{ 0 };
 	PopupType _meaning{ P_INFORM };
-	Dino* _dino{ nullptr };
+	std::shared_ptr<Dino> _dino{ nullptr };
 	
 	void changeFocusedButton(int newIndex);
 };

@@ -14,8 +14,8 @@ private:
     void drawData() override;
 
     void updateShop();
-    std::vector<DinoCard*> _shopList;
-    Button* _updateBtn;
+    std::vector<DinoCard> _shopList;
+    Button _updateBtn;
     int _activeIndex{ 0 };
 
     void handleKeyPressedEvent(sf::Keyboard::Scancode code) override;

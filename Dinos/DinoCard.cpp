@@ -1,7 +1,7 @@
 #include "DinoCard.h"
 
 DinoCard::DinoCard(int textSize, const std::string& text, sf::Color color, sf::Vector2f position, 
-	int meaning, Dino* dino, bool focused)
+	int meaning, std::shared_ptr<Dino> dino, bool focused)
 	: Button(textSize, text, color, position, meaning, focused)
 	, _dino {dino}
 {
@@ -69,7 +69,7 @@ std::string DinoCard::dinoName() const
 	return _dino->name();
 }
 
-void DinoCard::setDino(Dino* newDino)
+void DinoCard::setDino(std::shared_ptr<Dino> newDino)
 {
 	_dino = newDino;
 	if (_dino != nullptr)

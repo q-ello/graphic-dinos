@@ -3,7 +3,7 @@
 void ShopScreen::setScreenData()
 {
 	const int textSize = 25;
-	_updateBtn = new Button(40, "U - Update Shop", C_DARK_GREEN, sf::Vector2f(600, 700));
+	_updateBtn = Button(40, "U - Update Shop", C_DARK_GREEN, sf::Vector2f(600, 700));
 
 	updateShop();
 }
@@ -12,11 +12,11 @@ void ShopScreen::drawData()
 {
 	for (auto& card : _shopList)
 	{
-		card->draw(_window);
+		card.draw(_window);
 	}
-	_updateBtn->draw(_window);
+	_updateBtn.draw(_window);
 	_window->draw(_moneyText);
-	_returnBtn->draw(_window);
+	_returnBtn.draw(_window);
 }
 
 void ShopScreen::updateShop()
@@ -30,13 +30,13 @@ void ShopScreen::updateShop()
 	_shopList.clear();
 	for (int i = 0; i < 6; i++)
 	{
-		sf::Vector2f position = sf::Vector2f(xPos + xOffset * (i % 3),
-			yPos + yOffset * std::floor(i / 3));
-		_shopList.push_back(new DinoCard(textSize, "BUY", C_DARK_GREEN, position, C_BUY, 
+		sf::Vector2f position = sf::Vector2f(static_cast<float>(xPos + xOffset * (i % 3)),
+			static_cast<float>(yPos + yOffset * std::floor(i / 3)));
+		_shopList.push_back(DinoCard(textSize, "BUY", C_DARK_GREEN, position, C_BUY, 
 			Dino::generateDino(), i == _activeIndex));
 	}
 
-	_updateBtn->toggleFocus(false);
+	_updateBtn.toggleFocus(false);
 }
 
 void ShopScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
@@ -49,13 +49,13 @@ void ShopScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 
 	if (code == sf::Keyboard::Scancode::Enter)
 	{
-		_shopList[_activeIndex]->toggleAlmostExecuted(true);
+		_shopList[_activeIndex].toggleAlmostExecuted(true);
 		return;
 	}
 
 	if (code == sf::Keyboard::Scancode::U)
 	{
-		_updateBtn->toggleAlmostExecuted(true);
+		_updateBtn.toggleAlmostExecuted(true);
 		return;
 	}
 
@@ -83,15 +83,15 @@ void ShopScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butto
 {
 	for (int i = 0; i < 6; i++)
 	{
-		if (!_shopList[i]->isSold())
+		if (!_shopList[i].isSold())
 		{
-			if (_shopList[i]->handleMousePressed(button.x, button.y))
+			if (_shopList[i].handleMousePressed(button.x, button.y))
 			{
 				return;
 			}
 		}
 	}
-	if (_updateBtn->handleMousePressed(button.x, button.y))
+	if (_updateBtn.handleMousePressed(button.x, button.y))
 	{
 		return;
 	}
@@ -102,12 +102,12 @@ void ShopScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent butt
 {
 	for (int i = 0; i < 6; i++)
 	{
-		if (_shopList[i]->handleMouseReleased(button.x, button.y))
+		if (_shopList[i].handleMouseReleased(button.x, button.y))
 			{
 				showBuyPopup();
 			}
 	}
-	if (_updateBtn->handleMouseReleased(button.x, button.y))
+	if (_updateBtn.handleMouseReleased(button.x, button.y))
 	{
 		updateShop();
 	}
@@ -118,7 +118,7 @@ void ShopScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
 {
 	for (int i = 0; i < 6; i++)
 	{
-		if (!_shopList[i]->isSold() && _shopList[i]->handleMouseMovement(moveEvent.x, moveEvent.y))
+		if (!_shopList[i].isSold() && _shopList[i].handleMouseMovement(moveEvent.x, moveEvent.y))
 		{
 			changeFocusedButton({ i, 0 }, false);
 			return;
@@ -133,7 +133,7 @@ void ShopScreen::setNewActiveIndex(std::pair<int, int> direction)
 	bool everythingSoldOut = true;
 	for (auto& button : _shopList)
 	{
-		if (!button->isSold())
+		if (!button.isSold())
 		{
 			everythingSoldOut = false;
 			break;
@@ -146,7 +146,7 @@ void ShopScreen::setNewActiveIndex(std::pair<int, int> direction)
 		return;
 	}
 
-	if (_shopList[_activeIndex]->isSold())
+	if (_shopList[_activeIndex].isSold())
 	{
 		setNewActiveIndex(direction);
 	}
@@ -154,7 +154,7 @@ void ShopScreen::setNewActiveIndex(std::pair<int, int> direction)
 
 void ShopScreen::changeFocusedButton(std::pair<int, int> index, bool withArrows)
 {
-	_shopList[_activeIndex]->toggleFocus(false);
+	_shopList[_activeIndex].toggleFocus(false);
 	if (withArrows)
 	{
 		setNewActiveIndex(index);
@@ -163,7 +163,7 @@ void ShopScreen::changeFocusedButton(std::pair<int, int> index, bool withArrows)
 	{
 		_activeIndex = index.first;
 	}
-	_shopList[_activeIndex]->toggleFocus(true);
+	_shopList[_activeIndex].toggleFocus(true);
 }
 
 void ShopScreen::handleDiffPopupChoice(int choice)
@@ -173,21 +173,20 @@ void ShopScreen::handleDiffPopupChoice(int choice)
 		switch (choice)
 		{
 		case C_YES:
-			int dinoCost = _shopList[_activeIndex]->dinoCost();
+			int dinoCost = _shopList[_activeIndex].dinoCost();
 			if (Player::money() >= dinoCost)
 			{
 				Player::addCash(-1 * dinoCost);
-				Player::addDino(std::move(_shopList[_activeIndex]->dino()));
-				const std::string dinoName = _shopList[_activeIndex]->dinoName();
-				_popup = new Popup("You successfully\nbought " + dinoName + "!");
-				_shopList[_activeIndex]->buyDino();
+				Player::addDino(std::move(_shopList[_activeIndex].dino()));
+				const std::string dinoName = _shopList[_activeIndex].dinoName();
+				_popup = std::make_unique<Popup>(Popup("You successfully\nbought " + dinoName + "!"));
+				_shopList[_activeIndex].buyDino();
 				changeFocusedButton({ 1, 0 });
 				setMoneyData();
 			}
 			else
 			{
-				delete _popup;
-				_popup = new Popup("You do not have\nenough money.");
+				_popup = std::make_unique<Popup>(Popup("You do not have\nenough money."));
 			}
 			
 		}
@@ -196,9 +195,8 @@ void ShopScreen::handleDiffPopupChoice(int choice)
 
 void ShopScreen::showBuyPopup()
 {
-	const std::string dinoName = _shopList[_activeIndex]->dinoName();
-	const int dinoCost = _shopList[_activeIndex]->dinoCost();
-	delete _popup;
-	_popup = new Popup("Do you want to\nbuy " + dinoName + " for " + std::to_string(dinoCost) + "?",
-		P_BUY, { "YES", "NO" }, { C_YES, C_NO });
+	const std::string dinoName = _shopList[_activeIndex].dinoName();
+	const int dinoCost = _shopList[_activeIndex].dinoCost();
+	_popup = std::make_unique<Popup>(Popup("Do you want to\nbuy " + dinoName + " for " + std::to_string(dinoCost) + "?",
+		P_BUY, { "YES", "NO" }, { C_YES, C_NO }));
 }

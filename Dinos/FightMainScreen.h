@@ -21,11 +21,11 @@ private:
     //render stuff mostly
 	sf::Texture* _texture;
 	Terrain _terrain;
-    std::vector<Dino*> _party;
-	std::vector<Dino*> _enemies{};
+    std::vector<std::shared_ptr<Dino>> _party;
+	std::vector<std::shared_ptr<Dino>> _enemies{};
 	sf::Text _turnText;
-    Button* _escapeButton{ nullptr };
-    Button* _atkButton{ nullptr };
+    Button _escapeButton{ };
+    Button _atkButton{ };
     sf::Vector2f _dinoPos{ 0, 0 };
     sf::Vector2f _enemyPos{ 0, 0 };
 
@@ -33,9 +33,9 @@ private:
 
     //fight logic data
     FightState _state{ F_WAITING_INPUT };
-    Dino* _currentDino{ nullptr };
-    Dino* _oldDino{ nullptr };
-    Dino* _currentEnemy{ nullptr };
+    std::shared_ptr<Dino> _currentDino{ nullptr };
+    std::shared_ptr<Dino> _oldDino{ nullptr };
+    std::shared_ptr<Dino> _currentEnemy{ nullptr };
     bool _playerTurn{ true };
 
     //basic render
@@ -64,8 +64,8 @@ private:
     void dinosChanging();
 
     //who attacks who
-    Dino* _attackingDino{ nullptr };
-    Dino* _damagedDino{ nullptr };
+    std::shared_ptr<Dino> _attackingDino{ nullptr };
+    std::shared_ptr<Dino> _damagedDino{ nullptr };
 
     //final
     void fightEnded(bool won);

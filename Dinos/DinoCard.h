@@ -7,7 +7,7 @@ class DinoCard : public Button
 public:
 	using Button::Button;
 	DinoCard(int textSize, const std::string& text, sf::Color color, sf::Vector2f position,
-		int meaning, Dino* dino, bool focused = false);
+		int meaning, std::shared_ptr<Dino> dino, bool focused = false);
 
 	~DinoCard()
 	{
@@ -20,7 +20,7 @@ public:
 
 	std::string dinoName() const;
 	int dinoCost();
-	Dino* dino()
+	std::shared_ptr<Dino> dino()
 	{
 		return _dino;
 	}
@@ -36,10 +36,10 @@ public:
 		toggleFocus(false);
 	}
 
-	void setDino(Dino* newDino);
+	void setDino(std::shared_ptr<Dino> newDino);
 
 private:
-	Dino* _dino;
+	std::shared_ptr<Dino> _dino;
 	sf::RectangleShape _body;
 	boolean _sold{ false };
 	sf::Text _soldText;

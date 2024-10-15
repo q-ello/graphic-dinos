@@ -29,7 +29,7 @@ void Player::save()
     }
 }
 
-void Player::addDino(Dino* newDino)
+void Player::addDino(std::shared_ptr<Dino> newDino)
 {
     auto emptySlot = std::find(_currentParty.begin(), _currentParty.end(), nullptr);
     if (emptySlot != _currentParty.end())
@@ -64,7 +64,7 @@ void Player::load()
                 }
             }
             else if (v.size() == 6) {
-                std::vector<Dino*>* dinosToLoad;
+                std::vector<std::shared_ptr<Dino>>* dinosToLoad;
 
                 if (v[0] == "CURRENT") {
                     dinosToLoad = &_currentParty;
@@ -90,7 +90,7 @@ void Player::load()
 
 void Player::changeDino(int partyIndex, int restingIndex)
 {
-    Dino* partyDino = _currentParty[partyIndex];
+    std::shared_ptr<Dino> partyDino = _currentParty[partyIndex];
     _currentParty[partyIndex] = std::move(_ownedDinosaurs[restingIndex]);
 
     if (partyDino == nullptr)
@@ -131,7 +131,7 @@ Terrain Player::newTerrain()
     }
 }
 
-void Player::dinoDied(Dino* dino)
+void Player::dinoDied(std::shared_ptr<Dino> dino)
 {
     int i = 0;
     for (; i < 3; i++)
@@ -145,5 +145,5 @@ void Player::dinoDied(Dino* dino)
 }
 
 int Player::_money{ 100 };
-std::vector<Dino*> Player::_ownedDinosaurs{};
-std::vector<Dino*> Player::_currentParty{};
+std::vector<std::shared_ptr<Dino>> Player::_ownedDinosaurs{};
+std::vector<std::shared_ptr<Dino>> Player::_currentParty{};

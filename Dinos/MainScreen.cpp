@@ -17,19 +17,19 @@ void MainScreen::setScreenData()
 	const int xOffset = 350;
 	const int yOffset = 100;
 
-	_buttons[0].push_back(new Button(textSize, "FIGHT", C_DARK_GREEN,
+	_buttons[0].emplace_back(new Button(textSize, "FIGHT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal), C_FIGHT, true));
-	_buttons[0].push_back(new Button(textSize, "PARTY", C_DARK_GREEN,
+	_buttons[0].emplace_back(new Button(textSize, "PARTY", C_DARK_GREEN,
 		sf::Vector2f(xOriginal + xOffset, yOriginal), C_PARTY));
-	_buttons[1].push_back(new Button(textSize, "SHOP", C_DARK_GREEN,
+	_buttons[1].emplace_back(new Button(textSize, "SHOP", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + yOffset), C_SHOP));
-	_buttons[1].push_back(new Button(textSize, "RESTING", C_DARK_GREEN,
+	_buttons[1].emplace_back(new Button(textSize, "RESTING", C_DARK_GREEN,
 		sf::Vector2f(xOriginal + xOffset, yOriginal + yOffset), C_RESTING));
-	_buttons[2].push_back(new Button(textSize, "SAVE", C_DARK_GREEN,
+	_buttons[2].emplace_back(new Button(textSize, "SAVE", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + 2 * yOffset), C_SAVE));
-	_buttons[2].push_back(new LuckyDinoButton(textSize, "LUCKY DINO", C_DARK_GREEN,
+	_buttons[2].emplace_back(new LuckyDinoButton(textSize, "LUCKY DINO", C_DARK_GREEN,
 		sf::Vector2f(xOriginal + xOffset, yOriginal + 2 * yOffset), C_LUCKY_DINO));
-	_buttons[3].push_back(new Button(textSize, "QUIT", C_DARK_GREEN,
+	_buttons[3].emplace_back(new Button(textSize, "QUIT", C_DARK_GREEN,
 		sf::Vector2f(xOriginal, yOriginal + 3 * yOffset), C_QUIT));
 
 	setDinosData();
@@ -47,7 +47,7 @@ void MainScreen::drawData()
 	
 	_window->draw(_moneyText);
 
-	for (Dino* dino : Player::party())
+	for (auto& dino : Player::party())
 	{
 		if (dino != nullptr)
 		{
@@ -55,7 +55,7 @@ void MainScreen::drawData()
 		}
 	}
 
-	for (Dino* dino : Player::owned())
+	for (auto& dino : Player::owned())
 	{
 		dino->drawInMain(_window);
 	}
@@ -93,6 +93,11 @@ void MainScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butto
 	{
 		for (int j = 0; j < _buttons[i].size(); j++)
 		{
+			if (i == 2 && j == 1)
+			{
+				i = 2;
+			}
+
 			if (_buttons[i][j]->handleMousePressed(button.x, button.y))
 			{
 				return;
@@ -146,6 +151,16 @@ void MainScreen::setNewActiveIndex(std::pair<int, int> direction)
 	}
 }
 
+void MainScreen::handlePopupChoice(int choice)
+{
+	if (_popup.get()->type() == P_LUCKY_DINO && choice == C_RETURN)
+	{
+		setDinosData();
+	}
+
+	ScreenBase::handlePopupChoice(choice);
+}
+
 void MainScreen::changeFocusedButton(std::pair<int, int> direction, bool withArrows)
 {
 	_buttons[_activeIndex.first][_activeIndex.second]->toggleFocus(false);
@@ -174,14 +189,14 @@ void MainScreen::changeState()
 	}
 	case C_SAVE:
 		Player::save();
-		_popup = new Popup("Your progress was\nsuccessfully saved.");
+		_popup = std::make_unique<Popup>(Popup("Your progress was\nsuccessfully saved."));
 		break;
 	case C_LUCKY_DINO:
 	{
-		Dino* dino = Dino::generateDino();
-		_popup = new Popup("You got a lucky dino!", dino);
+		std::shared_ptr<Dino> dino = Dino::generateDino();
+		_popup = std::make_unique<Popup>(Popup("You got\na lucky dino!", dino));
 		Player::addDino(std::move(dino));
-		break;
+		return;
 	}
 	case C_PARTY:
 	{
@@ -194,7 +209,7 @@ void MainScreen::changeState()
 	{
 		if (Player::owned().empty())
 		{
-			_popup = new Popup("You have no resting dinos");
+			_popup = std::make_unique<Popup>(Popup("You have no resting dinos"));
 			break;
 		}
 		RestingScreen* restingScreen = new RestingScreen(_window);
@@ -206,7 +221,7 @@ void MainScreen::changeState()
 	{
 		if (Player::partyIsEmpty())
 		{
-			_popup = new Popup("You have no dinos\nin your party");
+			_popup = std::make_unique<Popup>(Popup("You have no dinos\nin your party"));
 			break;
 		}
 		FightWelcomeScreen* fight = new FightWelcomeScreen(_window);
@@ -228,7 +243,7 @@ void MainScreen::setDinosData()
 	const sf::Vector2f partyPosition{ 600, 250 };
 	const float xDinoOffset = 50;
 	const float yOffset = 100;
-	std::vector<Dino*> party = Player::party();
+	auto party = Player::party();
 	for (int i = 0; i < party.size(); i++)
 	{
 		if (party[i] == nullptr)
@@ -238,7 +253,7 @@ void MainScreen::setDinosData()
 		party[i]->setDataForMain({ partyPosition.x + xDinoOffset * i, partyPosition.y + 25 });
 
 	}
-	std::vector<Dino*> resting = Player::owned();
+	auto resting = Player::owned();
 	for (int i = 0; i < resting.size(); i++)
 	{
 		resting[i]->setDataForMain({ partyPosition.x + xDinoOffset * i, partyPosition.y + yOffset + 25 });

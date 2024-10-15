@@ -14,7 +14,7 @@ public:
 	~MainScreen();
 
 private:
-	std::vector<std::vector<Button*>> _buttons{ {}, {}, {}, {} };
+	std::vector<std::vector<std::shared_ptr<Button>>> _buttons{ {}, {}, {}, {} };
 	std::pair<int, int> _activeIndex{ 0, 0 };
 
 	void setScreenData() override;
@@ -25,6 +25,7 @@ private:
 	void handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button) override;
 	void handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent) override;
 	void setNewActiveIndex(std::pair<int, int> direction);
+	void handlePopupChoice(int choice) override;
 
 	void changeFocusedButton(std::pair<int, int> index, bool withArrows = true);
 	void changeState();

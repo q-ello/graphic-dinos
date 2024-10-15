@@ -16,15 +16,6 @@ Button::Button()
 {
 }
 
-void Button::draw(sf::RenderWindow* window)
-{
-	if (!checkCondition())
-	{
-		return;
-	}
-	window->draw(_text);
-}
-
 void Button::toggleFocus(bool focus)
 {
 	_text.setFillColor(focus ? C_FOCUSED : _textColor);
@@ -33,6 +24,15 @@ void Button::toggleFocus(bool focus)
 	{
 		_almostExecuted = false;
 	}
+}
+
+void Button::draw(sf::RenderWindow* window)
+{
+	if (!checkCondition())
+	{
+		return;
+	}
+	window->draw(_text);
 }
 
 bool Button::handleMouseMovement(int mouseX, int mouseY)

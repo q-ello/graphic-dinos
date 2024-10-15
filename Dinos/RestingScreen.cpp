@@ -6,7 +6,7 @@ void RestingScreen::setScreenData()
 	const float yPos = 100;
 	const float xOffset = 300;
 	const float yOffset = 300;
-	std::vector<Dino*> resting = Player::owned();
+	std::vector<std::shared_ptr<Dino>> resting = Player::owned();
 	if (resting.size() > 6)
 	{
 		resting.resize(6);
@@ -14,7 +14,7 @@ void RestingScreen::setScreenData()
 	for (int i = 0; i < resting.size(); i++)
 	{
 		sf::Vector2f position{ xPos + xOffset * (i % 3), static_cast<float>(yPos + yOffset * std::floor(i / 3)) };
-		_dinos.push_back(new DinoCard(30, "ADD TO PARTY", C_DARK_GREEN, position, C_CHANGE, 
+		_dinos.push_back(DinoCard(30, "ADD TO PARTY", C_DARK_GREEN, position, C_CHANGE, 
 			std::move(resting[i]), i == _activeIndex));
 	}
 }
@@ -22,27 +22,27 @@ void RestingScreen::setScreenData()
 void RestingScreen::setNewActiveIndex(std::pair<int, int> direction)
 {
 	_activeIndex = (direction.first + direction.second * 3 + _activeIndex + _dinos.size()) 
-		% _dinos.size();
+		% static_cast<int>(_dinos.size());
 }
 
 void RestingScreen::handleDiffPopupChoice(int choice)
 {
 	Player::changeDino(choice, _activeIndex);
-	_popup = new Popup("Dino was successfully\nadded to party");
+	_popup = std::make_unique<Popup>(Popup("Dino was successfully\nadded to party"));
 	updateDinoCards();
 }
 
 void RestingScreen::changeDino()
 {
-	_popup = new DinoPopup(true);
+	_popup = std::make_unique<Popup>(DinoPopup(true));
 }
 
 void RestingScreen::updateDinoCards()
 {
-	std::vector<Dino*> resting = Player::owned();
+	auto resting = Player::owned();
 	for (int i = 0; i < resting.size(); i++)
 	{
-		_dinos[i]->setDino(resting[i]);
+		_dinos[i].setDino(resting[i]);
 	}
 	if (_dinos.size() > resting.size())
 	{

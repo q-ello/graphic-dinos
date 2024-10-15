@@ -41,8 +41,8 @@ void FightMainScreen::setScreenData()
     _turnText.setPosition({ turnXPos, turnYPos });
     _turnText.setOutlineThickness(2);
 
-    _escapeButton = new Button(25, "ESC - CONCEDE", C_DARK_GREEN, { 25, 25 });
-    _atkButton = new Button(25, "F - ATTACK", C_DARK_GREEN, { 750, 700 });
+    _escapeButton = Button(25, "ESC - CONCEDE", C_DARK_GREEN, { 25, 25 });
+    _atkButton = Button(25, "F - ATTACK", C_DARK_GREEN, { 750, 700 });
 
     float yPos;
 
@@ -102,17 +102,17 @@ void FightMainScreen::drawData()
         break;
     }
 
-    _escapeButton->draw(_window);
-    _atkButton->draw(_window);
+    _escapeButton.draw(_window);
+    _atkButton.draw(_window);
     _window->draw(_turnText);
     _window->draw(_moneyText);
     
-    for (Dino* dino : _party)
+    for (auto& dino : _party)
     {
         dino->drawInFight(_window);
     }
 
-    for (Dino* dino : _enemies)
+    for (auto& dino : _enemies)
     {
         dino->drawInFight(_window);
     }
@@ -122,7 +122,7 @@ void FightMainScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 {
     if (code == sf::Keyboard::Scancode::Escape)
     {
-        _escapeButton->toggleAlmostExecuted(true);
+        _escapeButton.toggleAlmostExecuted(true);
         return;
     }
     
@@ -151,7 +151,7 @@ void FightMainScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 
     if (code == sf::Keyboard::Scancode::F)
     {
-        _atkButton->toggleAlmostExecuted(true);
+        _atkButton.toggleAlmostExecuted(true);
         return;
     }
 }
@@ -161,7 +161,7 @@ void FightMainScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
     if (code == sf::Keyboard::Scancode::Escape)
     {
         showConcedePopup();
-        _escapeButton->toggleAlmostExecuted(false);
+        _escapeButton.toggleAlmostExecuted(false);
         return;
     }
 
@@ -192,24 +192,24 @@ void FightMainScreen::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
     if (code == sf::Keyboard::Scancode::F)
     {
         startAttack();
-        _atkButton->toggleAlmostExecuted(false);
+        _atkButton.toggleAlmostExecuted(false);
         return;
     }
 }
 
 void FightMainScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent button)
 {
-    if (_escapeButton->handleMousePressed(button.x, button.y))
+    if (_escapeButton.handleMousePressed(button.x, button.y))
     {
         return;
     }
 
-    if (_atkButton->handleMousePressed(button.x, button.y))
+    if (_atkButton.handleMousePressed(button.x, button.y))
     {
         return;
     }
 
-    for (Dino* dino : _party)
+    for (auto& dino : _party)
     {
         if (dino->handleMousePressed(static_cast<float>(button.x), static_cast<float>(button.y)))
         {
@@ -220,12 +220,12 @@ void FightMainScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent 
 
 void FightMainScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent button)
 {
-    if (_escapeButton->handleMouseReleased(button.x, button.y))
+    if (_escapeButton.handleMouseReleased(button.x, button.y))
     {
         showConcedePopup();
     }
 
-    if (_atkButton->handleMouseReleased(button.x, button.y))
+    if (_atkButton.handleMouseReleased(button.x, button.y))
     {
         startAttack();
     }
@@ -259,13 +259,13 @@ void FightMainScreen::handleDiffPopupChoice(int choice)
 void FightMainScreen::showConcedePopup()
 {
     int concedeCost = static_cast<int>(_enemies.size()) * 25;
-    _popup = new Popup("You sure? That will\ncost you " + std::to_string(concedeCost), P_CONCEDE, {"CONCEDE", "STAY"}, {C_YES, C_NO});
+    _popup = std::make_unique<Popup>(Popup("You sure? That will\ncost you " + std::to_string(concedeCost), P_CONCEDE, {"CONCEDE", "STAY"}, {C_YES, C_NO}));
 }
 
 void FightMainScreen::returnToMain()
 {
     _show = false;
-    for (Dino* dino : _party)
+    for (auto& dino : _party)
     {
         dino->regenerate();
     }
@@ -317,7 +317,7 @@ void FightMainScreen::nextTurn()
     const std::string whose = _playerTurn ? "Your" : "Enemy's";
     _turnText.setString(whose + " turn");
 
-    Dino* temp = _attackingDino;
+    auto& temp = _attackingDino;
     _attackingDino = _playerTurn ? _currentDino : _currentEnemy;
     _damagedDino = _playerTurn ? _currentEnemy : _currentDino;
 
@@ -364,13 +364,13 @@ void FightMainScreen::dinoDying()
         return;
     }
 
-    std::vector<Dino*>* dinosAtLoss = !_playerTurn ? &_party : &_enemies;
+    auto& dinosAtLoss = !_playerTurn ? _party : _enemies;
 
-    for (int i = 0; i < dinosAtLoss->size(); i++)
+    for (int i = 0; i < dinosAtLoss.size(); i++)
     {
-        if ((*dinosAtLoss)[i] == _damagedDino)
+        if (dinosAtLoss[i] == _damagedDino)
         {
-            dinosAtLoss->erase(dinosAtLoss->begin() + i);
+            dinosAtLoss.erase(dinosAtLoss.begin() + i);
             break;
         }
     }
@@ -445,7 +445,8 @@ void FightMainScreen::fightEnded(bool won)
     else
     {
         pay = 40 * static_cast<int>(_enemies.size());
-        finalText = "You lost...\nYou lose " + std::to_string(pay * -1);
+        finalText = "You lost...\nYou lose " + std::to_string(pay);
+        pay *= -1;
     }
 
     Player::addCash(pay);

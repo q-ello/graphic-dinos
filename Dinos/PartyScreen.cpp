@@ -11,11 +11,11 @@ void PartyScreen::setScreenData()
 	const float xPos = 80;
 	const float yPos = 240;
 	const float xOffset = 300;
-	std::vector<Dino*> party = Player::party();
+	std::vector<std::shared_ptr<Dino>> party = Player::party();
 	for (int i = 0; i < party.size(); i++)
 	{
 		sf::Vector2f dinoPosition{ xPos + xOffset * i, yPos };
-		_dinos.push_back(new DinoCard(30, "CHANGE", C_DARK_GREEN, dinoPosition, C_CHANGE, std::move(party[i]), i == _activeIndex));
+		_dinos.push_back(DinoCard(30, "CHANGE", C_DARK_GREEN, dinoPosition, C_CHANGE, std::move(party[i]), i == _activeIndex));
 	}
 }
 
@@ -23,10 +23,10 @@ void PartyScreen::drawData()
 {
 	for (auto& card : _dinos)
 	{
-		card->draw(_window);
+		card.draw(_window);
 	}
 	_window->draw(_moneyText);
-	_returnBtn->draw(_window);
+	_returnBtn.draw(_window);
 }
 
 void PartyScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
@@ -39,7 +39,7 @@ void PartyScreen::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 
 	if (code == sf::Keyboard::Scancode::Enter)
 	{
-		_dinos[_activeIndex]->toggleAlmostExecuted(true);
+		_dinos[_activeIndex].toggleAlmostExecuted(true);
 		return;
 	}
 
@@ -61,7 +61,7 @@ void PartyScreen::handleMouseButtonPressedEvent(sf::Event::MouseButtonEvent butt
 {
 	for (int i = 0; i < _dinos.size(); i++)
 	{
-		if (_dinos[i]->handleMousePressed(button.x, button.y))
+		if (_dinos[i].handleMousePressed(button.x, button.y))
 			{
 				return;
 			}
@@ -73,7 +73,7 @@ void PartyScreen::handleMouseButtonReleasedEvent(sf::Event::MouseButtonEvent but
 {
 	for (int i = 0; i < _dinos.size(); i++)
 	{
-		if (_dinos[i]->handleMouseReleased(button.x, button.y))
+		if (_dinos[i].handleMouseReleased(button.x, button.y))
 		{
 			changeDino();
 			return;
@@ -86,7 +86,7 @@ void PartyScreen::handleMouseMovedEvent(sf::Event::MouseMoveEvent moveEvent)
 {
 	for (int i = 0; i < _dinos.size(); i++)
 	{
-		if (_dinos[i]->handleMouseMovement(moveEvent.x, moveEvent.y))
+		if (_dinos[i].handleMouseMovement(moveEvent.x, moveEvent.y))
 		{
 			changeFocusedButton({ i, 0 }, false);
 			return;
@@ -102,13 +102,13 @@ void PartyScreen::setNewActiveIndex(std::pair<int, int> direction)
 void PartyScreen::handleDiffPopupChoice(int choice)
 {
 	Player::changeDino(_activeIndex, choice);
-	_popup = new Popup("Dino was successfully changed");
+	_popup = std::make_unique<Popup>(Popup("Dino was successfully changed"));
 	updateDinoCards();
 }
 
 void PartyScreen::changeFocusedButton(std::pair<int, int> index, bool withArrows)
 {
-	_dinos[_activeIndex]->toggleFocus(false);
+	_dinos[_activeIndex].toggleFocus(false);
 	if (withArrows)
 	{
 		setNewActiveIndex(index);
@@ -117,27 +117,27 @@ void PartyScreen::changeFocusedButton(std::pair<int, int> index, bool withArrows
 	{
 		_activeIndex = index.first;
 	}
-	_dinos[_activeIndex]->toggleFocus(true);
+	_dinos[_activeIndex].toggleFocus(true);
 }
 
 void PartyScreen::changeDino()
 {
 	if (Player::owned().empty())
 	{
-		_popup = new Popup("You have no\nresting dinos.");
+		_popup = std::make_unique<Popup>(Popup("You have no\nresting dinos."));
 		return;
 	}
 	else
 	{
-		_popup = new DinoPopup(false);
+		_popup = std::make_unique<Popup>(DinoPopup(false));
 	}
 }
 
 void PartyScreen::updateDinoCards()
 {
-	std::vector<Dino*> party = Player::party();
+	auto party = Player::party();
 	for (int i = 0; i < 3; i++)
 	{
-		_dinos[i]->setDino(party[i]);
+		_dinos[i].setDino(party[i]);
 	}
 }

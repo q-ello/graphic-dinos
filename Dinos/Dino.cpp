@@ -130,7 +130,7 @@ void Dino::regenerate()
     _fightInfo[0].setString("HP: " + std::to_string(_HP));
 }
 
-Dino* Dino::generateDino()
+std::shared_ptr<Dino> Dino::generateDino()
 {
     EDinoName DinoName;
     switch (rand() % 3)
@@ -161,7 +161,7 @@ Dino* Dino::generateDino()
         break;
     }
 
-    return new Dino(type, DinoName, rand() % 20 + 10, rand() % 20 + 10, rand() % 20 + 10);
+    return std::make_shared<Dino>(type, DinoName, rand() % 20 + 10, rand() % 20 + 10, rand() % 20 + 10);
 }
 
 void Dino::setDataForDrawing(sf::Vector2f position)
@@ -276,7 +276,7 @@ void Dino::setFightData(sf::Vector2f position, Terrain terrain, bool turnedLeft,
     _fightInfo[1].setString("DMG: " + std::to_string(damage(terrain)));
 
     _numText.setString(std::to_string(number + 1));
-    const float numXOffset = Utils::alignToCenter(&_numText, { DINO_SIZE * 2, DINO_SIZE * 2 }).x;
+    const float numXOffset = Utils::alignToCenter(&_numText, {DINO_SIZE * 2, DINO_SIZE * 2}).x;
     _numText.setPosition({position.x + numXOffset, position.y + DINO_SIZE * 2});
 }
 
@@ -386,7 +386,7 @@ sf::Vector2f Dino::position() const
 
 void Dino::move(int dir)
 {
-    const float speed = 0.1;
+    const float speed = 0.1f;
     sf::Vector2f movement = { speed * dir, 0 };
     _sprite.move(movement);
     _numText.move(movement);

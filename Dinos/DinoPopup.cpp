@@ -2,7 +2,7 @@
 
 DinoPopup::DinoPopup(boolean isParty)
 {
-    std::vector<Dino*> dinos;
+    std::vector<std::shared_ptr<Dino>> dinos;
     if (isParty)
     {
         dinos = Player::party();
@@ -32,7 +32,7 @@ DinoPopup::DinoPopup(boolean isParty)
     {
         sf::Vector2f dinoPos = sf::Vector2f(static_cast<float>(xPos + xOffset * (i % 3)),
             static_cast<float>(yPos + yOffset * std::floor(i / 3)));
-        _buttons.push_back(new DinoCard(20, "REPLACE", C_DARK_GREEN, dinoPos, i, dinos[i], i == 0));
+        _buttons.push_back(DinoCard(20, "REPLACE", C_DARK_GREEN, dinoPos, i, dinos[i], i == 0));
     }
 
     _mainText = Utils::setText(40, C_DARK_GREEN, "Choose Dino");

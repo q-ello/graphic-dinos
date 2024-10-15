@@ -21,7 +21,7 @@ Popup::Popup(const std::string& mainText, PopupType type, const std::vector<std:
 
 		for (int i = 0; i < buttons.size(); i++)
 		{
-			_buttons.push_back(new Button(20, buttons[i], C_DARK_GREEN,
+			_buttons.push_back(Button(20, buttons[i], C_DARK_GREEN,
 				sf::Vector2f(buttonPos.x + buttonOffset * i, buttonPos.y), choices[i], i == 0));
 		}
 	}
@@ -36,27 +36,26 @@ Popup::Popup()
 {
 }
 
-Popup::Popup(const std::string& mainText, Dino* dino)
+Popup::Popup(const std::string& mainText, std::shared_ptr<Dino> dino)
 	: _dino{ dino }
+	, _meaning {P_LUCKY_DINO}
 {
 	_mainText = Utils::setText(40, C_DARK_GREEN, mainText);
 	_bg = Utils::setBG(C_SEMITRANSPARENT);
 	_clueText = Utils::setClueText(C_DARK_GREEN);
 
-	sf::Vector2f size = { 400, 400 };
+	sf::Vector2f size = { 350, 350 };
 	sf::Vector2f bodyPos = Utils::alignToCenter(size);
 
 	_body = Utils::setRect(size, C_DULL_GREEN, C_DARK_GREEN, 3, bodyPos);
-	_mainText.setPosition(sf::Vector2f(bodyPos.x + 10,
-		bodyPos.y + 5));
+	_mainText.setPosition({ Utils::alignToCenter(&_mainText).x, bodyPos.y + 5 });
 
-	_dino->setDataForDrawing({ bodyPos.x + 60, bodyPos.y + 60 });
+	_dino->setDataForDrawing({ bodyPos.x + 60, bodyPos.y + 150 });
 }
 
 Popup::~Popup()
 {
 	_buttons.clear();
-	delete _dino;
 }
 
 void Popup::draw(sf::RenderWindow* window)
@@ -67,7 +66,7 @@ void Popup::draw(sf::RenderWindow* window)
 	window->draw(_mainText);
 	for (auto& button : _buttons)
 	{
-		button->draw(std::move(window));
+		button.draw(std::move(window));
 	}
 
 	if (_dino != nullptr)
@@ -93,7 +92,7 @@ void Popup::handleKeyPressedEvent(sf::Keyboard::Scancode code)
 		}
 		if (code == sf::Keyboard::Scan::Enter)
 		{
-			_buttons[_activeIndex]->toggleAlmostExecuted(true);
+			_buttons[_activeIndex].toggleAlmostExecuted(true);
 			return;
 		}
 	}
@@ -107,7 +106,7 @@ int Popup::handleKeyReleasedEvent(sf::Keyboard::Scancode code)
 	}
 	if (code == sf::Keyboard::Scancode::Enter)
 	{
-		return _buttons[_activeIndex]->meaning();
+		return _buttons[_activeIndex].meaning();
 	}
 	if (code == sf::Keyboard::Scancode::Escape)
 	{
@@ -120,7 +119,7 @@ void Popup::handleMouseButtonPressedEvent(int mouseX, int mouseY)
 {
 	for (auto& button : _buttons)
 	{
-		if (button->handleMousePressed(mouseX, mouseY))
+		if (button.handleMousePressed(mouseX, mouseY))
 		{
 			return;
 		}
@@ -131,9 +130,9 @@ int Popup::handleMouseButtonReleasedEvent(int mouseX, int mouseY)
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{
-		if (_buttons[i]->handleMouseReleased(mouseX, mouseY))
+		if (_buttons[i].handleMouseReleased(mouseX, mouseY))
 		{
-			return _buttons[i]->meaning();
+			return _buttons[i].meaning();
 		}
 	}
 
@@ -150,7 +149,7 @@ void Popup::handleMouseMovedEvent(sf::Event::MouseMoveEvent event)
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{
-		if (_buttons[i]->handleMouseMovement(event.x, event.y))
+		if (_buttons[i].handleMouseMovement(event.x, event.y))
 		{
 			changeFocusedButton(i);
 			return;
@@ -160,7 +159,7 @@ void Popup::handleMouseMovedEvent(sf::Event::MouseMoveEvent event)
 
 void Popup::changeFocusedButton(int newIndex)
 {
-	_buttons[_activeIndex]->toggleFocus(false);
+	_buttons[_activeIndex].toggleFocus(false);
 	_activeIndex = newIndex;
-	_buttons[_activeIndex]->toggleFocus(true);
+	_buttons[_activeIndex].toggleFocus(true);
 }

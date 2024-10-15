@@ -49,7 +49,7 @@ public:
     bool takeDamage(int dmg);
     void regenerate();
 
-    static Dino* generateDino();
+    static std::shared_ptr<Dino> generateDino();
 
     //draw in different screens
     void setDataForDrawing(sf::Vector2f position);
