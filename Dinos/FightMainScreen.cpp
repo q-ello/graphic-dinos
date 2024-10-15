@@ -274,8 +274,8 @@ void FightMainScreen::returnToMain()
 void FightMainScreen::startAttack()
 {
     _state = F_ATK_ATTACK;
-    _isAnimating = true;
     _currentDino->setAnimation(D_Attacking);
+    _waitingInput = false;
 }
 
 void FightMainScreen::executeDino(int i, bool attackToo)
@@ -300,7 +300,7 @@ void FightMainScreen::executeDino(int i, bool attackToo)
 
     _state = F_CHANGE;
 
-    _isAnimating = true;
+    _waitingInput = false;
 }
 
 void FightMainScreen::changeDinosData()
@@ -324,7 +324,7 @@ void FightMainScreen::nextTurn()
     if (_playerTurn)
     {
         _state = F_WAITING_INPUT;
-        _isAnimating = false;
+        _waitingInput = true;
         return;
     }
 
@@ -346,7 +346,7 @@ void FightMainScreen::dinoDamaged()
 {
     if (_damagedDino->animCompleted())
     {
-        if (_damagedDino->hp() == 0)
+        if (_damagedDino->hp() <= 0)
         {
             _damagedDino->setAnimation(D_Dying);
             _state = F_ATK_DIE;

@@ -21,7 +21,6 @@ private:
     //render stuff mostly
 	sf::Texture* _texture;
 	Terrain _terrain;
-	bool _isAnimating{ false };
     std::vector<Dino*> _party;
 	std::vector<Dino*> _enemies{};
 	sf::Text _turnText;

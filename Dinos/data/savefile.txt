@@ -1,4 +1,2 @@
-MONEY: 205
-CURRENT STR Tryceratops 28 15 27
-CURRENT DEX Tyranosaurus 16 21 29
-OWNED DEX Tryceratops 17 22 20
+MONEY: 355
+CURRENT INT Tyranosaurus 16 21 29
